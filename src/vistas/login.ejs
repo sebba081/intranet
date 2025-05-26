@@ -1,42 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
 <%- include('partials/head') %>
-<body class="min-h-screen flex items-center justify-center bg-gray-100">
 
-  <div class="bg-white shadow-md rounded-xl p-8 w-full max-w-md">
-    <h1 class="text-2xl font-bold text-center text-blue-700 mb-6">Iniciar sesión</h1>
+  <body
+    class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
 
-    <form class="space-y-4" action="#" method="POST">
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
-        <input type="email" id="email" name="email" required
-               class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-8 w-full max-w-md">
+      <h1 class="text-2xl font-bold text-center text-blue-700 dark:text-blue-400 mb-6">Iniciar
+        sesión</h1>
+
+      <form class="space-y-4" action="#" method="POST">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Correo
+            electrónico</label>
+          <input type="email" id="email" name="email" required
+            class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Contraseña</label>
+          <input type="password" id="password" name="password" required
+            class="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div class="flex items-center justify-between">
+          <label class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+            <input type="checkbox" class="mr-2" />
+            Recordarme
+          </label>
+          <a href="#" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">¿Olvidaste
+            tu contraseña?</a>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition">
+          Entrar
+        </button>
+      </form>
+
+      <div class="mt-6 text-center">
+        <button onclick="toggleDarkMode()" class="text-sm text-gray-500 dark:text-gray-300 hover:underline">
+          Cambiar a modo <span id="theme-label">oscuro</span>
+        </button>
       </div>
 
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-        <input type="password" id="password" name="password" required
-               class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
+      <p class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        © 2025 Intranet Empresa S.A.
+      </p>
+    </div>
 
-      <div class="flex items-center justify-between">
-        <label class="flex items-center text-sm text-gray-600">
-          <input type="checkbox" class="mr-2" />
-          Recordarme
-        </label>
-        <a href="#" class="text-sm text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
-      </div>
+    <script>
+      // Cargar el tema guardado
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
 
-      <button type="submit"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
-        Entrar
-      </button>
-    </form>
+      function toggleDarkMode() {
+        const html = document.documentElement;
+        const isDark = html.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      }
+    </script>
 
-    <p class="mt-6 text-center text-sm text-gray-500">
-      © 2025 Intranet Empresa S.A.
-    </p>
-  </div>
+  </body>
 
-</body>
 </html>
