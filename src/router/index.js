@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const isAuthenticated = require('./middlewares/isAuthenticated');
 
-// Importar y usar las rutas
-router.use('/home', require('./home'));
-router.use('/login', require('./login'));
-//router.use('/estudiantes', require('./estudiantes'));
-//router.use('/profesores', require('./profesores'));
+// manejo de rutas de vista y apis
+
+router.use('/api/', require('./api/indexApi'));
+router.use('/', require('./controllers/indexController'));
 
 module.exports = router;
