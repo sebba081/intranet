@@ -27,22 +27,23 @@ Este proyecto es una aplicación web de intranet diseñada para gestionar inform
     ```
 ## Uso
 ### Desarrollo
-    Para iniciar el servidor en modo de desarrollo, ejecuta:
-    ```bash
+Para iniciar el servidor en modo de desarrollo, ejecuta:
+
     npm run dev
-    ```
-    El servidor se ejecutará en http://localhost:3000.
+    
+El servidor se ejecutará en http://localhost:3000.
 
 ### Producción
-    Para iniciar el servidor en modo de producción, ejecuta:
-    ```bash
+Para iniciar el servidor en modo de producción, ejecuta:
+    
     npm start
-    ```
-Estructura del Proyecto
-src/: Contiene el código fuente de la aplicación.
-router/: Define las rutas de la aplicación.
-views/: Contiene las plantillas EJS.
-public/: Archivos estáticos como CSS.
-package.json: Configuración del proyecto y dependencias.
-Contribución
+
+## Estructura del Proyecto
+- **src/**: Contiene el código fuente de la aplicación.
+- **router/**: Define las rutas de la aplicación.
+- **views/**: Contiene las plantillas EJS.
+- **public/**: Archivos estáticos como CSS.
+- **package.json**: Configuración del proyecto y dependencias.
+
+## Contribución
 Si deseas contribuir, por favor abre un issue o envía un pull request.
