@@ -40,7 +40,7 @@ Esta guía describe cómo configurar y utilizar Sequelize para gestionar migraci
        "password": "tu_contraseña",
        "database": "tu_base_de_datos",
        "host": "127.0.0.1",
-       "dialect": "postgres"
+       "dialect": "mysql"
      }
    }
    ```
@@ -50,7 +50,7 @@ Esta guía describe cómo configurar y utilizar Sequelize para gestionar migraci
 1. Usa el comando de Sequelize para crear una nueva migración:
 
    ```bash
-   npx sequelize-cli migration:generate --name nombre-de-la-migracion
+   npx sequelize-cli migration:generate --name nombre-de-la-migracion --migrations-path src/database/migrations
    ```
 
 2. Edita el archivo generado en el directorio `migrations` y define las operaciones `up` y `down`:
@@ -95,13 +95,13 @@ Esta guía describe cómo configurar y utilizar Sequelize para gestionar migraci
 1. Para aplicar las migraciones, ejecuta:
 
    ```bash
-   npx sequelize-cli db:migrate
+   npx sequelize-cli db:migrate --config src/config/config.json --migrations-path src/database/migrations
    ```
 
 2. Para revertir la última migración, usa:
 
    ```bash
-   npx sequelize-cli db:migrate:undo
+   npx sequelize-cli db:migrate:undo --config src/config/config.json --migrations-path src/database/migrations
    ```
 
 ## Integración
