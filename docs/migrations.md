@@ -1,64 +1,92 @@
-# Gestión de Migraciones con Knex.js
+# Gestión de Migraciones con Sequelize
 
 ## Introducción
 
-Esta guía describe cómo configurar y utilizar Knex.js para gestionar migraciones de base de datos en un proyecto Node.js.
+Esta guía describe cómo configurar y utilizar Sequelize para gestionar migraciones de base de datos en un proyecto Node.js.
 
 ## Instalación
 
-1. Instala Knex.js y el cliente de base de datos que estés utilizando (por ejemplo, `pg` para PostgreSQL, `mysql` para MySQL, etc.).
+1. Instala Sequelize CLI y el cliente de base de datos que estés utilizando (por ejemplo, `pg` para PostgreSQL, `mysql2` para MySQL, etc.).
 
    ```bash
-   npm install knex
-   npm install pg # o mysql, sqlite3, etc., dependiendo de tu base de datos
+   npm install --save sequelize
+   npm install --save-dev sequelize-cli
+   npm install pg pg-hstore # o mysql2, sqlite3, etc., dependiendo de tu base de datos
    ```
 
 ## Configuración
 
-1. Crea un archivo de configuración para Knex llamado `knexfile.js` en la raíz del proyecto.
+1. Inicializa Sequelize CLI en tu proyecto:
 
-   ```js
-   // knexfile.js
-   module.exports = {
-     development: {
-       client: 'pg', // o 'mysql', 'sqlite3', etc.
-       connection: {
-         host: '127.0.0.1',
-         user: 'tu_usuario',
-         password: 'tu_contraseña',
-         database: 'tu_base_de_datos'
-       },
-       migrations: {
-         directory: './migrations'
-       }
-     },
-     // Puedes agregar configuraciones para producción, pruebas, etc.
-   };
+   ```bash
+   npx sequelize-cli init
+   ```
+
+   Esto generará la siguiente estructura de carpetas:
+
+   ```
+   config/
+   models/
+   migrations/
+   seeders/
+   ```
+
+2. Configura el archivo `config/config.json` (o `.js`) con los datos de tu base de datos:
+
+   ```json
+   {
+     "development": {
+       "username": "tu_usuario",
+       "password": "tu_contraseña",
+       "database": "tu_base_de_datos",
+       "host": "127.0.0.1",
+       "dialect": "postgres"
+     }
+   }
    ```
 
 ## Creación de Migraciones
 
-1. Usa el comando de Knex para crear una nueva migración.
+1. Usa el comando de Sequelize para crear una nueva migración:
 
    ```bash
-   npx knex migrate:make nombre_de_la_migracion
+   npx sequelize-cli migration:generate --name nombre-de-la-migracion
    ```
 
-2. Edita el archivo de migración generado en el directorio `migrations` y define las operaciones `up` y `down`.
+2. Edita el archivo generado en el directorio `migrations` y define las operaciones `up` y `down`:
 
    ```js
-   // 20231010123456_nombre_de_la_migracion.js
-   exports.up = function(knex) {
-     return knex.schema.createTable('users', function(table) {
-       table.increments('id').primary();
-       table.string('name');
-       table.string('email');
-       table.timestamps();
-     });
-   };
+   'use strict';
 
-   exports.down = function(knex) {
-     return knex.schema.dropTable('users');
+   module.exports = {
+     async up(queryInterface, Sequelize) {
+       await queryInterface.createTable('users', {
+         id: {
+           allowNull: false,
+           autoIncrement: true,
+           primaryKey: true,
+           type: Sequelize.INTEGER
+         },
+         name: {
+           type: Sequelize.STRING
+         },
+         email: {
+           type: Sequelize.STRING
+         },
+         createdAt: {
+           allowNull: false,
+           type: Sequelize.DATE
+         },
+         updatedAt: {
+           allowNull: false,
+           type: Sequelize.DATE
+         }
+       });
+     },
+
+     async down(queryInterface, Sequelize) {
+       await queryInterface.dropTable('users');
+     }
    };
    ```
 
@@ -67,17 +95,15 @@ Esta guía describe cómo configurar y utilizar Knex.js para gestionar migracion
 1. Para aplicar las migraciones, ejecuta:
 
    ```bash
-   npx knex migrate:latest
+   npx sequelize-cli db:migrate
    ```
 
 2. Para revertir la última migración, usa:
 
    ```bash
-   npx knex migrate:rollback
+   npx sequelize-cli db:migrate:undo
    ```
 
 ## Integración
 
 Asegúrate de ejecutar las migraciones antes de iniciar tu aplicación en un entorno de desarrollo o producción para que la base de datos esté en el estado esperado.
-
-Guarda este contenido en un archivo llamado `migrations.md` dentro de un directorio `docs` en tu proyecto. Esto proporcionará una referencia clara y accesible para gestionar migraciones en tu aplicación.
