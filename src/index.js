@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const indexApi = require('./router/api/indexApi');
 const indexController = require('./router/controllers/indexController');
+const db = require('./db/config');
 
 // Configurar el motor de plantillas
 const app = express();
@@ -26,3 +27,12 @@ app.listen(app.get('port'), () => {
 // .on('error', (err) => {
 //     console.error('Error al iniciar el servidor:', err);
 // });
+
+// conexion a la base de datos
+db.connect((err) => {
+    if (err) {
+        console.error('Error al conectar a la base de datos:', err);
+        process.exit(1);
+    }
+    console.log('Conectado a la base de datos');
+});
