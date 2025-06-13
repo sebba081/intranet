@@ -1,0 +1,12 @@
+{
+  "tables": [
+    "Usuario",        
+    "Administrador",  
+    "Alumno",         
+    "Profesor",       
+    "Aula",           
+    "Materia",        
+    "Curso",          
+    "Inscripcion"     
+  ]
+}
