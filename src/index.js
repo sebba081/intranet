@@ -1,8 +1,8 @@
+const connection = require('./database/config/conection');
 const express = require('express');
 const path = require('path');
 const indexApi = require('./router/api/indexApi');
 const indexController = require('./router/controllers/indexController');
-const db = require('./db/config');
 
 // Configurar el motor de plantillas
 const app = express();
@@ -22,17 +22,6 @@ app.use('/', indexController);
 
 app.set('port', process.env.PORT || 3000);
 app.listen(app.get('port'), () => {
-    console.log(`Servicio levantado: http://localhost:${app.get('port')}`);
-})
-// .on('error', (err) => {
-//     console.error('Error al iniciar el servidor:', err);
-// });
-
-// conexion a la base de datos
-db.connect((err) => {
-    if (err) {
-        console.error('Error al conectar a la base de datos:', err);
-        process.exit(1);
-    }
-    console.log('Conectado a la base de datos');
+  console.log(`Servidor corriendo en el puerto ${app.get('port')}`);
 });
+// No necesitas llamar a connection.connect aquí, ya que se hace en conection.js

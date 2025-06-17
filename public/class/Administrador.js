@@ -1,12 +1,27 @@
-const Usuario = require('./Usuario');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db');
 
-class Administrador extends Usuario {
-  constructor(id, usuario_id, nombre, apellido) {
-    super(usuario_id);
-    this.id = id;
-    this.nombre = nombre;
-    this.apellido = apellido;
-  }
-}
+const Administrador = sequelize.define('administrador', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  nombre: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  apellido: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  usuario_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'usuarios',
+      key: 'id',
+    },
+  },
+});
 
 module.exports = Administrador;

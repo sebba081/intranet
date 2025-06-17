@@ -1,0 +1,7 @@
+{
+    "database": "intranet",
+    "username": "root",
+    "password": "8527autoS*",
+    "host": "localhost", 
+    "dialect": "mysql"
+}
