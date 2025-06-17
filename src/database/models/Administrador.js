@@ -1,15 +1,35 @@
-const Usuario = require('../../../public/class/Usuario');
+module.exports = (sequelize, DataTypes) => {
+  const Administrador = sequelize.define('Administrador', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    usuario_id: {
+      type: DataTypes.INTEGER,
+      unique: true,
+      references: {
+        model: 'Usuario',
+        key: 'id'
+      }
+    },
+    nombre: {
+      type: DataTypes.STRING
+    },
+    apellido: {
+      type: DataTypes.STRING
+    }
+  }, {
+    tableName: 'administrador', // Nombre fijo en singular
+    timestamps: true
+  });
 
-class Administrador extends Usuario {
-  constructor(id, usuario_id, nombre, apellido) {
-    super(usuario_id);
-    this.id = id;
-    this.nombre = nombre;
-    this.apellido = apellido;
-  }
-}
+  // Definir asociación
+  Administrador.associate = models => {
+    Administrador.belongsTo(models.Usuario, {
+      foreignKey: 'usuario_id'
+    });
+  };
 
-module.exports = Administrador;
-
-
-
+  return Administrador;
+};

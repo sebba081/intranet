@@ -1,14 +1,23 @@
-const {DataTypes} = require('sequelize');
-const sequelize = require('./db');
-
-// Definir las tablas y sus relaciones
-const Carrera = sequelize.define('carrera', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  nombre: DataTypes.STRING,
-  duracion: DataTypes.INTEGER
-});
-
+// modules de aula
+module.exports = (sequelize, DataTypes) => {
+    const Aula = sequelize.define('Aula', {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        nombre: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        ubicacion: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        capacidad: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
+    });
+    return Aula;
+};
