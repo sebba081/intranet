@@ -50,7 +50,7 @@ Esta guía describe cómo configurar y utilizar Sequelize para gestionar migraci
 1. Usa el comando de Sequelize para crear una nueva migración:
 
    ```bash
-   npx sequelize-cli migration:generate --name nombre-de-la-migracion --migrations-path src/database/migrations
+   npx sequelize-cli migration:generate --name nombre-de-la-migracion
    ```
 
 2. Edita el archivo generado en el directorio `migrations` y define las operaciones `up` y `down`:
