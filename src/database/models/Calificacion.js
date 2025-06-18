@@ -1,10 +1,31 @@
-class Calificacion {
-  constructor(id, inscripcion_id, nota, fecha) {
-    this.id = id;
-    this.inscripcion_id = inscripcion_id;
-    this.nota = nota;
-    this.fecha = fecha;
-  }
-}
+module.exports = (sequelize, DataTypes) => {
+  const Calificacion = sequelize.define('Calificacion', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    inscripcion_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    nota: {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    },
+    fecha: {
+      type: DataTypes.DATE,
+      allowNull: false
+    }
+  }, {
+    tableName: 'calificaciones',
+    timestamps: true
+  });
 
-module.exports = Calificacion;
+  // Aquí puedes definir las asociaciones si es necesario
+  Calificacion.associate = function(models) {
+    // Asociaciones
+  };
+
+  return Calificacion;
+};

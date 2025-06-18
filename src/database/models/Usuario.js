@@ -1,3 +1,6 @@
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('../config/conection');
+
 module.exports = (sequelize, DataTypes) => {
   const Usuario = sequelize.define('Usuario', {
     id: {
@@ -19,9 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    tableName: 'usuarios', // Nombre fijo en singular
+    tableName: 'usuarios',
     timestamps: true
-    
   });
 
   return Usuario;

@@ -1,7 +1,23 @@
 {
-    "database": "intranet",
+  "development": {
     "username": "root",
     "password": "8527autoS*",
-    "host": "localhost", 
+    "database": "intranet",
+    "host": "localhost",
     "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "8527autoS*",
+    "database": "intranet_test",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "8527autoS*",
+    "database": "intranet_prod",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
 }

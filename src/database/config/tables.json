@@ -4,9 +4,11 @@
     "Administrador",  
     "Alumno",         
     "Profesor",       
-    "Aula",           
+    "Aula",
+    "Calificacion",           
     "Materia",        
     "Curso",          
-    "Inscripcion"     
+    "Inscripcion",
+    "Horario"     
   ]
 }

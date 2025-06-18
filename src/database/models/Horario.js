@@ -1,12 +1,49 @@
-class Horario {
-  constructor(id, curso_id, aula_id, dia, hora_inicio, hora_fin) {
-    this.id = id;
-    this.curso_id = curso_id;
-    this.aula_id = aula_id;
-    this.dia = dia;
-    this.hora_inicio = hora_inicio;
-    this.hora_fin = hora_fin;
-  }
-}
+module.exports = (sequelize, DataTypes) => {
+  const Horario = sequelize.define('Horario', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    curso_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Curso',
+        key: 'id'
+      }
+    },
+    aula_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Aula',
+        key: 'id'
+      }
+    },
+    dia: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    hora_inicio: {
+      type: DataTypes.TIME,
+      allowNull: false
+    },
+    hora_fin: {
+      type: DataTypes.TIME,
+      allowNull: false
+    }
+  }, {
+    tableName: 'horarios',
+    timestamps: true
+  });
 
-module.exports = Horario;
+  Horario.associate = models => {
+    Horario.belongsTo(models.Curso, {
+      foreignKey: 'curso_id'
+    });
+    Horario.belongsTo(models.Aula, {
+      foreignKey: 'aula_id'
+    });
+  };
+
+  return Horario;
+};

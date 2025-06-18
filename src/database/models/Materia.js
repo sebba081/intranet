@@ -1,10 +1,22 @@
-class Materia {
-  constructor(id, nombre, descripcion, codigo) {
-    this.id = id;
-    this.nombre = nombre;
-    this.descripcion = descripcion;
-    this.codigo = codigo;
-  }
-}
+module.exports = (sequelize, DataTypes) => {
+  const Materia = sequelize.define('Materia', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    nombre: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    descripcion: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    }
+  }, {
+    tableName: 'materias',
+    timestamps: true
+  });
 
-module.exports = Materia;
+  return Materia;
+};

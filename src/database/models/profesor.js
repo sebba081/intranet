@@ -7,30 +7,33 @@ module.exports = (sequelize, DataTypes) => {
         },
         usuario_id: {
             type: DataTypes.INTEGER,
-            unique: true,
             references: {
                 model: 'Usuario',
                 key: 'id'
             }
         },
         nombre: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         apellido: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         dni: {
             type: DataTypes.STRING,
-            unique: true
+            allowNull: false
         },
         titulo: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         especialidad: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         }
     }, {
-        tableName: 'profesor', // Nombre fijo en singular
+        tableName: 'profesores',
         timestamps: true
     });
   
