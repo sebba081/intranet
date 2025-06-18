@@ -1,17 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
   const Alumno = sequelize.define('Alumno', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true
+      allowNull: false
     },
     usuario_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      allowNull: false,
       references: {
-        model: 'Usuario',
+        model: 'usuario',
         key: 'id'
       }
-    },
+    }
+    ,
     nombre: {
       type: DataTypes.STRING,
       allowNull: false
@@ -31,11 +34,12 @@ module.exports = (sequelize, DataTypes) => {
     carrera: {
       type: DataTypes.STRING,
       allowNull: false
-    }}, {
+    }
+  }, {
     tableName: 'alumnos',
     timestamps: true
   });
-  
+
   // Definir asociación
   Alumno.associate = models => {
     Alumno.belongsTo(models.Usuario, {

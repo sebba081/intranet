@@ -1,19 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
   const Horario = sequelize.define('Horario', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, 
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true
+      allowNull: false
     },
-    curso_id: {
-      type: DataTypes.INTEGER,
+    usuario_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
       references: {
-        model: 'Curso',
+        model: 'Usuario',
         key: 'id'
       }
     },
     aula_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'Aula',
         key: 'id'

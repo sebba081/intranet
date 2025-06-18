@@ -1,12 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
   const Calificacion = sequelize.define('Calificacion', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, 
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true
+      allowNull: false
     },
     inscripcion_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false
     },
     nota: {

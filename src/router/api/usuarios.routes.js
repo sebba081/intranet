@@ -1,27 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const { Usuario } = require('../../database/models'); // Asegúrate de que esta ruta sea correcta
+const { Usuario } = require('../../database/models'); 
 
 // Obtener todos los usuarios
 router.get('/', async (req, res) => {
     try {
-        const users = await Usuario.findAll(); // Usar el método de Sequelize
+        const users = await Usuario.findAll();
         res.json(users);
     } catch (error) {
         res.status(500).send('Error al obtener usuarios');
     }
 });
 
+// obtener un usuario por ID
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await Usuario.findByPk(req.params.id); // Usar findByPk en lugar de findById
+        if (!user) return res.status(404).send('Usuario no encontrado');
+        res.send(user);
+    } catch (error) {
+        res.status(500).send('Error al obtener usuario');
+    }
+});
+
 // Crear un nuevo usuario
 router.post('/', async (req, res) => {
     try {
-        const newUser = new Usuario(req.body);
-        await newUser.save();
+        console.log('Creando nuevo usuario:', req.body); //  imprime los datos del nuevo usuario en consola
+        const newUser = await Usuario.create(req.body); 
         res.status(201).send(newUser);
     } catch (error) {
-        res.status(400).send('Error al crear usuario');
+        console.error('Error al crear usuario:', error); // 👈 imprime el error real
+        res.status(400).json({ error: error.message });
     }
 });
+
 
 // Obtener un usuario por ID
 router.get('/:id', async (req, res) => {
@@ -30,7 +43,6 @@ router.get('/:id', async (req, res) => {
         if (!user) return res.status(404).send('Usuario no encontrado');
         res.send(user);
     } catch (error) {
-        console.error('Error al obtener usuario:', error); // Log para más detalles
         res.status(500).send('Error al obtener usuario');
     }
 });
@@ -52,8 +64,9 @@ router.delete('/:id', async (req, res) => {
     try {
         const user = await Usuario.findByPk(req.params.id);
         if (!user) return res.status(404).send('Usuario no encontrado');
+
         await user.destroy();
-        res.send(user);
+        res.status(204).send(); // ✅ sin cuerpo
     } catch (error) {
         res.status(500).send('Error al eliminar usuario');
     }

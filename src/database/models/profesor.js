@@ -1,12 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
     const Profesor = sequelize.define('Profesor', {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
-            autoIncrement: true
+            allowNull: false
         },
         usuario_id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
+            allowNull: false,
             references: {
                 model: 'Usuario',
                 key: 'id'
@@ -36,13 +38,13 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'profesores',
         timestamps: true
     });
-  
+
     // Definir asociación
     Profesor.associate = models => {
         Profesor.belongsTo(models.Usuario, {
             foreignKey: 'usuario_id'
         });
     };
-    
+
     return Profesor;
 };

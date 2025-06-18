@@ -1,19 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
   const Inscripcion = sequelize.define('Inscripcion', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, 
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true
+      allowNull: false
     },
     alumno_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'Alumno',
         key: 'id'
       }
     },
     curso_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'Curso',
         key: 'id'

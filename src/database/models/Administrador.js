@@ -1,13 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
   const Administrador = sequelize.define('Administrador', {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true
+      allowNull: false
     },
     usuario_id: {
-      type: DataTypes.INTEGER,
-      unique: true,
+      type: DataTypes.UUID,
+      allowNull: false,
       references: {
         model: 'Usuario',
         key: 'id'

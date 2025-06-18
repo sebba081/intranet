@@ -7,14 +7,15 @@ const indexController = require('./router/controllers/indexController');
 // Configurar el motor de plantillas
 const app = express();
 
+// Middleware para analizar el cuerpo de las solicitudes
+app.use(express.json()); // Agregar este middleware para solicitudes JSON
 app.use(express.urlencoded({ extended: true }));
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Configurar la carpeta de archivos estáticos
 app.use('/vistas', express.static(path.join(__dirname, 'public', 'css')));
-
-// Middleware para analizar el cuerpo de las solicitudes
 
 // Usar el enrutador de home
 app.use('/api', indexApi);
