@@ -217,7 +217,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      anio_academico: {
+      año_academico: {
         type: Sequelize.INTEGER,
         allowNull: false
       },

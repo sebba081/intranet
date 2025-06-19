@@ -6,22 +6,15 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    usuario_id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Usuario',
-        key: 'id'
-      }
-    },
     profesor_id: {
       type: DataTypes.UUID,
-      references: {
-        model: 'Profesor',
-        key: 'id'
-      }
+      allowNull: false,
     },
-    anio_academico: {
+    materia_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    año_academico: {
       type: DataTypes.INTEGER,
       allowNull: false
     },

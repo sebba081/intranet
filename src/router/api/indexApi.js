@@ -9,6 +9,8 @@ const materiasRoutes = require('./materias.routes.js');
 const notasRoutes = require('./notas.routes.js');
 const profesoresRoutes = require('./profesores.routes.js');
 const usuariosRoutes = require('./usuarios.routes.js');
+const administradoresRoutes = require('./administradores.routes.js');
+const aulasRoutes = require('./aulas.routes.js');
 
 // Importar y usar las rutas
 router.use('/alumnos', alumnosRoutes);
@@ -18,5 +20,7 @@ router.use('/materias', materiasRoutes);
 router.use('/notas', notasRoutes);
 router.use('/profesores', profesoresRoutes);
 router.use('/usuarios', usuariosRoutes);
+router.use('/administradores', administradoresRoutes);
+router.use('/aulas', aulasRoutes);
 
 module.exports = router;
