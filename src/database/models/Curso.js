@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
+    alumnos_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     profesor_id: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -37,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
     });
     Curso.belongsTo(models.Profesor, {
       foreignKey: 'profesor_id'
+    });
+    Curso.hasMany(models.alumnos, {
+      foreignKey: 'alumnos_id'
     });
   };
 
