@@ -11,7 +11,6 @@ describe('Rutas de alumnos', () => {
             password: '123456',
             rol: 'alumno'
         });
-        console.log('Respuesta de creación de usuario:', usuarioRes.body);
         expect(usuarioRes.statusCode).toBe(201);
         usuarioId = usuarioRes.body.id;
         expect(usuarioId).toBeDefined();
@@ -29,13 +28,10 @@ describe('Rutas de alumnos', () => {
             carrera: 'Ingeniería Informática'
         });
 
-        console.log('CREAR alumno:', res.statusCode, res.body);
-
         expect(res.statusCode).toBe(201);
         expect(res.body).toHaveProperty('id');
 
         alumnoId = res.body.id;
-        console.log('ID asignado:', alumnoId);
     });
 
     it('debería obtener todos los alumnos', async () => {
@@ -66,5 +62,8 @@ describe('Rutas de alumnos', () => {
     it('debería eliminar un alumno', async () => {
         const res = await request(app).delete(`/api/alumnos/${alumnoId}`);
         expect(res.statusCode).toBe(204);
+
+        const getRes = await request(app).get(`/api/alumnos/${alumnoId}`);
+        expect(getRes.statusCode).toBe(404);
     });
 });
