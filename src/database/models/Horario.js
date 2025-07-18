@@ -6,23 +6,24 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    usuario_id: {
+    curso_id: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Usuario',
+        model: 'cursos',
         key: 'id'
       }
     },
     aula_id: {
       type: DataTypes.UUID,
+      allowNull: false,
       references: {
-        model: 'Aula',
+        model: 'aulas',
         key: 'id'
       }
     },
     dia: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"),
       allowNull: false
     },
     hora_inicio: {

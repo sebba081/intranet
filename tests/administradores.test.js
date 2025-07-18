@@ -53,4 +53,4 @@ describe('Rutas de administradores', () => {
         const res = await request(app).delete(`/api/administradores/${adminId}`);
         expect(res.statusCode).toBe(204);
     });
-}); 
+});

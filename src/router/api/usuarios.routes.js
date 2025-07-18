@@ -1,74 +1,83 @@
 const express = require('express');
 const router = express.Router();
-const { Usuario } = require('../../database/models'); 
+const { Usuario } = require('../../database/models');
 
 // Obtener todos los usuarios
 router.get('/', async (req, res) => {
     try {
-        const users = await Usuario.findAll();
-        res.json(users);
+        const usuarios = await Usuario.findAll();
+        res.json(usuarios);
     } catch (error) {
-        res.status(500).send('Error al obtener usuarios');
+        console.error('❌ Error al obtener usuarios:', error);
+        res.status(500).json({ error: 'Error al obtener los usuarios' });
     }
 });
 
-// obtener un usuario por ID
+// Obtener un usuario por ID
 router.get('/:id', async (req, res) => {
     try {
-        const user = await Usuario.findByPk(req.params.id); // Usar findByPk en lugar de findById
-        if (!user) return res.status(404).send('Usuario no encontrado');
-        res.send(user);
+        const usuario = await Usuario.findByPk(req.params.id);
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+        res.json(usuario);
     } catch (error) {
-        res.status(500).send('Error al obtener usuario');
+        console.error('❌ Error al obtener usuario:', error);
+        res.status(500).json({ error: 'Error al obtener el usuario' });
     }
 });
 
 // Crear un nuevo usuario
 router.post('/', async (req, res) => {
     try {
-        console.log('Creando nuevo usuario:', req.body); //  imprime los datos del nuevo usuario en consola
-        const newUser = await Usuario.create(req.body); 
-        res.status(201).send(newUser);
-    } catch (error) {
-        console.error('Error al crear usuario:', error); // 👈 imprime el error real
-        res.status(400).json({ error: error.message });
-    }
-});
+        const { email, password, rol } = req.body;
 
+        if (!email || !password || !rol) {
+            return res.status(400).json({ error: 'Faltan campos obligatorios: email, password o rol' });
+        }
 
-// Obtener un usuario por ID
-router.get('/:id', async (req, res) => {
-    try {
-        const user = await Usuario.findByPk(req.params.id); // Usar findByPk en lugar de findById
-        if (!user) return res.status(404).send('Usuario no encontrado');
-        res.send(user);
+        const nuevoUsuario = await Usuario.create({ email, password, rol });
+        res.status(201).json(nuevoUsuario);
     } catch (error) {
-        res.status(500).send('Error al obtener usuario');
+        console.error('❌ Error al crear usuario:', error);
+
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({ error: 'El email ya está registrado' });
+        }
+
+        res.status(500).json({ error: 'Error al crear el usuario', detalle: error.message });
     }
 });
 
 // Actualizar un usuario por ID
 router.put('/:id', async (req, res) => {
     try {
-        const user = await Usuario.findByPk(req.params.id);
-        if (!user) return res.status(404).send('Usuario no encontrado');
-        await user.update(req.body);
-        res.send(user);
+        const usuario = await Usuario.findByPk(req.params.id);
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        await usuario.update(req.body);
+        res.json(usuario);
     } catch (error) {
-        res.status(400).send('Error al actualizar usuario');
+        console.error('❌ Error al actualizar usuario:', error);
+        res.status(500).json({ error: 'Error al actualizar el usuario' });
     }
 });
 
 // Eliminar un usuario por ID
 router.delete('/:id', async (req, res) => {
     try {
-        const user = await Usuario.findByPk(req.params.id);
-        if (!user) return res.status(404).send('Usuario no encontrado');
+        const usuario = await Usuario.findByPk(req.params.id);
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
 
-        await user.destroy();
-        res.status(204).send(); // ✅ sin cuerpo
+        await usuario.destroy();
+        res.status(204).send();
     } catch (error) {
-        res.status(500).send('Error al eliminar usuario');
+        console.error('❌ Error al eliminar usuario:', error);
+        res.status(500).json({ error: 'Error al eliminar el usuario' });
     }
 });
 

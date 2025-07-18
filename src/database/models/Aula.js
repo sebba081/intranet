@@ -1,4 +1,3 @@
-// modules de aula
 module.exports = (sequelize, DataTypes) => {
   const Aula = sequelize.define('Aula', {
     id: {
@@ -8,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     nombre: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
+      allowNull: false
+    },
+    ubicacion: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     capacidad: {

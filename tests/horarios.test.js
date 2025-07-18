@@ -3,12 +3,14 @@ const app = require('../src/app');
 
 describe('Rutas de horarios', () => {
     let horarioId = null;
-    const usuarioId = '11111111-1111-1111-1111-111111111111';
+
+    // Asegúrate de usar IDs válidos en la base o créalos antes
+    const cursoId = '11111111-1111-1111-1111-111111111111';
     const aulaId = '22222222-2222-2222-2222-222222222222';
 
     it('debería crear un nuevo horario', async () => {
         const res = await request(app).post('/api/horarios').send({
-            usuario_id: usuarioId,
+            curso_id: cursoId,
             aula_id: aulaId,
             dia: 'Lunes',
             hora_inicio: '08:00',
@@ -33,11 +35,11 @@ describe('Rutas de horarios', () => {
 
     it('debería actualizar un horario', async () => {
         const res = await request(app).put(`/api/horarios/${horarioId}`).send({
+            curso_id: cursoId,
+            aula_id: aulaId,
             dia: 'Martes',
             hora_inicio: '10:00',
-            hora_fin: '12:00',
-            usuario_id: usuarioId,
-            aula_id: aulaId
+            hora_fin: '12:00'
         });
         expect(res.statusCode).toBe(200);
         expect(res.body.dia).toBe('Martes');
@@ -46,5 +48,8 @@ describe('Rutas de horarios', () => {
     it('debería eliminar un horario', async () => {
         const res = await request(app).delete(`/api/horarios/${horarioId}`);
         expect(res.statusCode).toBe(204);
+
+        const getRes = await request(app).get(`/api/horarios/${horarioId}`);
+        expect(getRes.statusCode).toBe(404);
     });
-}); 
+});

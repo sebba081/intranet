@@ -23,14 +23,11 @@ describe('Rutas de alumnos', () => {
             apellido: 'Pérez',
             dni: `DNI${Date.now()}`,
             fecha_nacimiento: '2000-01-01',
-            telefono: '123456789',
-            direccion: 'Calle Falsa 123',
             carrera: 'Ingeniería Informática'
         });
 
         expect(res.statusCode).toBe(201);
         expect(res.body).toHaveProperty('id');
-
         alumnoId = res.body.id;
     });
 
@@ -52,11 +49,11 @@ describe('Rutas de alumnos', () => {
             apellido: 'Pérez',
             dni: `DNI${Date.now()}`,
             fecha_nacimiento: '2000-01-01',
-            telefono: '987654321',
-            direccion: 'Nueva dirección'
+            carrera: 'Ingeniería Industrial'
         });
         expect(res.statusCode).toBe(200);
         expect(res.body.nombre).toBe('Juan Modificado');
+        expect(res.body.carrera).toBe('Ingeniería Industrial');
     });
 
     it('debería eliminar un alumno', async () => {

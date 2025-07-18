@@ -3,11 +3,13 @@ const app = require('../src/app');
 
 describe('Rutas de materias', () => {
     let materiaId = null;
+    const codigoBase = `MAT-${Date.now()}`;
 
     it('debería crear una nueva materia', async () => {
         const res = await request(app).post('/api/materias').send({
             nombre: 'Matemática',
-            descripcion: 'Materia de matemáticas básicas'
+            descripcion: 'Materia de matemáticas básicas',
+            codigo: codigoBase
         });
         expect(res.statusCode).toBe(201);
         expect(res.body).toHaveProperty('id');
@@ -29,7 +31,8 @@ describe('Rutas de materias', () => {
     it('debería actualizar una materia', async () => {
         const res = await request(app).put(`/api/materias/${materiaId}`).send({
             nombre: 'Matemática Avanzada',
-            descripcion: 'Materia de matemáticas avanzadas'
+            descripcion: 'Materia de matemáticas avanzadas',
+            codigo: `${codigoBase}-UPD`
         });
         expect(res.statusCode).toBe(200);
         expect(res.body.nombre).toBe('Matemática Avanzada');
@@ -38,5 +41,8 @@ describe('Rutas de materias', () => {
     it('debería eliminar una materia', async () => {
         const res = await request(app).delete(`/api/materias/${materiaId}`);
         expect(res.statusCode).toBe(204);
+
+        const getRes = await request(app).get(`/api/materias/${materiaId}`);
+        expect(getRes.statusCode).toBe(404);
     });
-}); 
+});

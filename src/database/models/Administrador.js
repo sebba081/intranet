@@ -9,23 +9,26 @@ module.exports = (sequelize, DataTypes) => {
     usuario_id: {
       type: DataTypes.UUID,
       allowNull: false,
+      unique: true, // Según el diseño: un usuario solo puede tener un administrador asociado
       references: {
-        model: 'Usuario',
+        model: 'usuarios', // nombre real de la tabla referenciada
         key: 'id'
       }
     },
     nombre: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING(100),
+      allowNull: false
     },
     apellido: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING(100),
+      allowNull: false
     }
   }, {
-    tableName: 'administrador', // Nombre fijo en singular
+    tableName: 'administrador', // singular según diseño
     timestamps: true
   });
 
-  // Definir asociación
+  // Asociación
   Administrador.associate = models => {
     Administrador.belongsTo(models.Usuario, {
       foreignKey: 'usuario_id'

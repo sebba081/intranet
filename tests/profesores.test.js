@@ -6,7 +6,6 @@ describe('Rutas de profesores', () => {
     let usuarioId;
 
     beforeAll(async () => {
-        // Crear usuario con rol "profesor"
         const usuarioRes = await request(app).post('/api/usuarios').send({
             email: `profesor-${Date.now()}@mail.com`,
             password: '123456',
@@ -47,15 +46,21 @@ describe('Rutas de profesores', () => {
     it('debería actualizar un profesor', async () => {
         const res = await request(app).put(`/api/profesores/${profesorId}`).send({
             nombre: 'Carlos Modificado',
+            apellido: 'Gómez',
+            dni: `DNI${Date.now()}`,
+            titulo: 'Doctorado en Matemáticas',
             especialidad: 'Geometría'
         });
         expect(res.statusCode).toBe(200);
         expect(res.body.nombre).toBe('Carlos Modificado');
+        expect(res.body.especialidad).toBe('Geometría');
     });
 
     it('debería eliminar un profesor', async () => {
         const res = await request(app).delete(`/api/profesores/${profesorId}`);
         expect(res.statusCode).toBe(204);
-    });
 
+        const getRes = await request(app).get(`/api/profesores/${profesorId}`);
+        expect(getRes.statusCode).toBe(404);
+    });
 });

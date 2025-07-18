@@ -1,14 +1,14 @@
 {
   "tables": [
-    "Usuario",        
-    "Administrador",  
-    "Alumno",         
-    "Profesor",       
-    "Aula",
-    "Calificacion",           
-    "Materia",        
-    "Curso",          
-    "Inscripcion",
-    "Horario"     
+    "Usuarios",
+    "Administradores",
+    "Alumnos",
+    "Profesores",
+    "Aulas",
+    "Calificaciones",
+    "Materias",
+    "Cursos",
+    "Inscripciones",
+    "Horarios"
   ]
 }
