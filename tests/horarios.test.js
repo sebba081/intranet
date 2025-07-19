@@ -1,12 +1,52 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de horarios', () => {
     let horarioId = null;
 
-    // Asegúrate de usar IDs válidos en la base o créalos antes
-    const cursoId = '11111111-1111-1111-1111-111111111111';
-    const aulaId = '22222222-2222-2222-2222-222222222222';
+    let cursoId;
+    let aulaId;
+
+    beforeAll(async () => {
+        await sequelize.sync({ force: true });
+
+        const aulaRes = await request(app).post('/api/aulas').send({
+            nombre: 'A1',
+            ubicacion: 'Edif A',
+            capacidad: 50
+        });
+        aulaId = aulaRes.body.id;
+
+        const usuarioProf = await request(app).post('/api/usuarios').send({
+            email: `prof-${Date.now()}@mail.com`,
+            password: '123456',
+            rol: 'profesor'
+        });
+        const profesorRes = await request(app).post('/api/profesores').send({
+            usuario_id: usuarioProf.body.id,
+            nombre: 'Juan',
+            apellido: 'Perez',
+            dni: `PROF-${Date.now()}`,
+            titulo: 'PhD',
+            especialidad: 'Test'
+        });
+
+        const materiaRes = await request(app).post('/api/materias').send({
+            nombre: 'Historia',
+            descripcion: 'Historia',
+            codigo: `MAT-${Date.now()}`
+        });
+
+        const cursoRes = await request(app).post('/api/cursos').send({
+            profesor_id: profesorRes.body.id,
+            materia_id: materiaRes.body.id,
+            anio_academico: 2024,
+            cuatrimestre: 1,
+            cupo: 30
+        });
+        cursoId = cursoRes.body.id;
+    });
 
     it('debería crear un nuevo horario', async () => {
         const res = await request(app).post('/api/horarios').send({
@@ -51,5 +91,9 @@ describe('Rutas de horarios', () => {
 
         const getRes = await request(app).get(`/api/horarios/${horarioId}`);
         expect(getRes.statusCode).toBe(404);
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 });

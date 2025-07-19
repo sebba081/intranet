@@ -1,8 +1,13 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de aulas', () => {
     let aulaId = null;
+
+    beforeAll(async () => {
+        await sequelize.sync({ force: true });
+    });
 
     it('debería crear una nueva aula', async () => {
         const res = await request(app).post('/api/aulas').send({
@@ -43,5 +48,9 @@ describe('Rutas de aulas', () => {
 
         const getRes = await request(app).get(`/api/aulas/${aulaId}`);
         expect(getRes.statusCode).toBe(404);
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 });

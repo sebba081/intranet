@@ -1,9 +1,14 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de materias', () => {
     let materiaId = null;
     const codigoBase = `MAT-${Date.now()}`;
+
+    beforeAll(async () => {
+        await sequelize.sync({ force: true });
+    });
 
     it('debería crear una nueva materia', async () => {
         const res = await request(app).post('/api/materias').send({
@@ -44,5 +49,9 @@ describe('Rutas de materias', () => {
 
         const getRes = await request(app).get(`/api/materias/${materiaId}`);
         expect(getRes.statusCode).toBe(404);
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 });
