@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de notas (calificaciones)', () => {
     let notaId = null;
@@ -8,6 +9,7 @@ describe('Rutas de notas (calificaciones)', () => {
     let cursoId = null;
 
     beforeAll(async () => {
+        await sequelize.sync({ force: true });
         // Crear usuario y alumno
         const userRes = await request(app).post('/api/usuarios').send({
             email: `alumno-${Date.now()}@mail.com`,
@@ -31,8 +33,10 @@ describe('Rutas de notas (calificaciones)', () => {
         // Crear materia
         const materiaRes = await request(app).post('/api/materias').send({
             nombre: 'Matemática',
-            descripcion: 'Cálculo I'
+            descripcion: 'Cálculo I',
+            codigo: `MAT-${Date.now()}`
         });
+        expect(materiaRes.statusCode).toBe(201);
         const materiaId = materiaRes.body.id;
 
         // Crear profesor
@@ -51,6 +55,7 @@ describe('Rutas de notas (calificaciones)', () => {
             titulo: 'Magíster',
             especialidad: 'Álgebra'
         });
+        expect(profesorRes.statusCode).toBe(201);
         const profesorId = profesorRes.body.id;
 
         // Crear curso
@@ -61,6 +66,8 @@ describe('Rutas de notas (calificaciones)', () => {
             cuatrimestre: 1,
             cupo: 40
         });
+        console.log('cursoRes', cursoRes.statusCode, cursoRes.body);
+        expect(cursoRes.statusCode).toBe(201);
         cursoId = cursoRes.body.id;
 
         // Crear inscripción válida
@@ -69,6 +76,7 @@ describe('Rutas de notas (calificaciones)', () => {
             curso_id: cursoId,
             fecha_inscripcion: '2024-01-01'
         });
+        expect(inscripcionRes.statusCode).toBe(201);
         inscripcionId = inscripcionRes.body.id;
     });
 
@@ -116,5 +124,9 @@ describe('Rutas de notas (calificaciones)', () => {
 
         const getRes = await request(app).get(`/api/notas/${notaId}`);
         expect(getRes.statusCode).toBe(404);
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 });

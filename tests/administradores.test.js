@@ -1,11 +1,13 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de administradores', () => {
     let adminId = null;
     let usuarioId = null;
 
     beforeAll(async () => {
+        await sequelize.sync({ force: true });
         // Crear usuario con rol "admin"
         const usuarioRes = await request(app).post('/api/usuarios').send({
             email: `admin-${Date.now()}@mail.com`,
@@ -15,6 +17,10 @@ describe('Rutas de administradores', () => {
         expect(usuarioRes.statusCode).toBe(201);
         usuarioId = usuarioRes.body.id;
         expect(usuarioId).toBeDefined();
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 
     it('debería crear un nuevo administrador', async () => {

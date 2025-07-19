@@ -65,7 +65,7 @@ describe('Rutas de inscripciones', () => {
         const cursoRes = await request(app).post('/api/cursos').send({
             profesor_id: profesorId,
             materia_id: materiaId,
-            ano_academico: 2024,
+            anio_academico: 2024,
             cuatrimestre: 1,
             cupo: 35
         });

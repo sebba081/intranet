@@ -1,11 +1,13 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 let profesorId;
 
 describe('Rutas de profesores', () => {
     let usuarioId;
 
     beforeAll(async () => {
+        await sequelize.sync({ force: true });
         const usuarioRes = await request(app).post('/api/usuarios').send({
             email: `profesor-${Date.now()}@mail.com`,
             password: '123456',
@@ -62,5 +64,9 @@ describe('Rutas de profesores', () => {
 
         const getRes = await request(app).get(`/api/profesores/${profesorId}`);
         expect(getRes.statusCode).toBe(404);
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 });

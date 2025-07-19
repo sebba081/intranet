@@ -1,11 +1,13 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de alumnos', () => {
     let alumnoId = null;
     let usuarioId = null;
 
     beforeAll(async () => {
+        await sequelize.sync({ force: true });
         const usuarioRes = await request(app).post('/api/usuarios').send({
             email: `alumno-${Date.now()}@mail.com`,
             password: '123456',
@@ -14,6 +16,10 @@ describe('Rutas de alumnos', () => {
         expect(usuarioRes.statusCode).toBe(201);
         usuarioId = usuarioRes.body.id;
         expect(usuarioId).toBeDefined();
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 
     it('debería crear un nuevo alumno', async () => {

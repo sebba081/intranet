@@ -1,18 +1,44 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de cursos', () => {
     let cursoId = null;
 
-    // Reemplazar estos IDs por valores válidos o crearlos en un beforeAll
-    const profesorId = '11111111-1111-1111-1111-111111111111';
-    const materiaId = '33333333-3333-3333-3333-333333333333';
+    let profesorId;
+    let materiaId;
+
+    beforeAll(async () => {
+        await sequelize.sync({ force: true });
+
+        const usuarioProf = await request(app).post('/api/usuarios').send({
+            email: `prof-${Date.now()}@mail.com`,
+            password: '123456',
+            rol: 'profesor'
+        });
+        const profesorRes = await request(app).post('/api/profesores').send({
+            usuario_id: usuarioProf.body.id,
+            nombre: 'Ana',
+            apellido: 'López',
+            dni: `PROF-${Date.now()}`,
+            titulo: 'PhD',
+            especialidad: 'Test'
+        });
+        profesorId = profesorRes.body.id;
+
+        const materiaRes = await request(app).post('/api/materias').send({
+            nombre: 'Historia',
+            descripcion: 'Historia básica',
+            codigo: `MAT-${Date.now()}`
+        });
+        materiaId = materiaRes.body.id;
+    });
 
     it('debería crear un nuevo curso', async () => {
         const res = await request(app).post('/api/cursos').send({
             profesor_id: profesorId,
             materia_id: materiaId,
-            ano_academico: 2024,
+            anio_academico: 2024,
             cuatrimestre: 1,
             cupo: 30
         });
@@ -52,5 +78,9 @@ describe('Rutas de cursos', () => {
 
         const getRes = await request(app).get(`/api/cursos/${cursoId}`);
         expect(getRes.statusCode).toBe(404);
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 });
