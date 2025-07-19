@@ -3,16 +3,46 @@ const app = require('../src/app');
 
 describe('Rutas de cursos', () => {
     let cursoId = null;
+    let profesorId = null;
+    let materiaId = null;
 
-    // Reemplazar estos IDs por valores válidos o crearlos en un beforeAll
-    const profesorId = '11111111-1111-1111-1111-111111111111';
-    const materiaId = '33333333-3333-3333-3333-333333333333';
+    beforeAll(async () => {
+        // Crear usuario para el profesor
+        const profUserRes = await request(app).post('/api/usuarios').send({
+            email: `prof-${Date.now()}@mail.com`,
+            password: '123456',
+            rol: 'profesor'
+        });
+        expect(profUserRes.statusCode).toBe(201);
+        const usuarioId = profUserRes.body.id;
+
+        // Crear profesor
+        const profesorRes = await request(app).post('/api/profesores').send({
+            usuario_id: usuarioId,
+            nombre: 'Carlos',
+            apellido: 'Docente',
+            dni: `PROF-${Date.now()}`,
+            titulo: 'Ingeniero',
+            especialidad: 'Matemáticas'
+        });
+        expect(profesorRes.statusCode).toBe(201);
+        profesorId = profesorRes.body.id;
+
+        // Crear materia
+        const materiaRes = await request(app).post('/api/materias').send({
+            nombre: 'Álgebra',
+            descripcion: 'Álgebra I',
+            codigo: `MAT-${Date.now()}`
+        });
+        expect(materiaRes.statusCode).toBe(201);
+        materiaId = materiaRes.body.id;
+    });
 
     it('debería crear un nuevo curso', async () => {
         const res = await request(app).post('/api/cursos').send({
             profesor_id: profesorId,
             materia_id: materiaId,
-            ano_academico: 2024,
+            anio_academico: 2024,
             cuatrimestre: 1,
             cupo: 30
         });

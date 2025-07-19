@@ -1,14 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
     <%- include('partials/head') %>
-    <body>
-        <%- include('partials/header') %>
-        <main>
-            <div class="container mx-auto py-12">
-                <h1 class="text-4xl font-bold text-center">Nuestro Sitio Web</h1>
-                <p class="text-lg leading-relaxed text-gray-700 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non felis ut dui vulputate ullamcorper. Donec ac purus non neque iaculis faucibus.</p>
+
+    <body class="hold-transition layout-top-nav">
+        <div class="wrapper">
+
+            <!-- Encabezado / Navbar -->
+            <%- include('partials/header') %>
+
+            <!-- Contenido principal -->
+            <div class="content-wrapper">
+                <div class="content-header">
+                    <div class="container">
+                        <div class="row mb-2">
+                            <div class="col-sm-12 text-center">
+                                <h1 class="m-0 font-weight-bold">Nuestro Sitio
+                                    Web</h1>
+                                <p class="lead mt-2">
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipiscing elit. Sed non felis ut dui
+                                    vulputate ullamcorper. Donec ac purus non
+                                    neque iaculis faucibus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </main>
-        <%- include('partials/footer') %>
+
+            <!-- Footer -->
+            <%- include('partials/footer') %>
+
+        </div>
+
+        <!-- Scripts requeridos por AdminLTE -->
+        <script src="/adminlte/plugins/jquery/jquery.min.js"></script>
+        <script
+            src="/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/adminlte/js/adminlte.min.js"></script>
     </body>
 </html>

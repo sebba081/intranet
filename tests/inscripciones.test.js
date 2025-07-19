@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../src/app');
 const { sequelize } = require('../src/database/models');
+const { v4: uuidv4 } = require('uuid');
 
 describe('Rutas de inscripciones', () => {
     let inscripcionId = null;
@@ -8,64 +9,59 @@ describe('Rutas de inscripciones', () => {
     let cursoId = null;
 
     beforeAll(async () => {
-        await sequelize.sync({ force: true }); // Limpia la base de datos
-
-        // Crear usuario y alumno
-        const userRes = await request(app).post('/api/usuarios').send({
-            email: `alumno-${Date.now()}@mail.com`,
+        // Crear usuario para alumno
+        const userAlumno = await request(app).post('/api/usuarios').send({
+            email: `alumno-${uuidv4()}@mail.com`,
             password: '123456',
             rol: 'alumno'
         });
-        expect(userRes.statusCode).toBe(201);
-        const usuarioId = userRes.body.id;
+        expect(userAlumno.statusCode).toBe(201);
 
         const alumnoRes = await request(app).post('/api/alumnos').send({
-            usuario_id: usuarioId,
-            nombre: 'Luis',
-            apellido: 'González',
+            usuario_id: userAlumno.body.id,
+            nombre: 'Carlos',
+            apellido: 'Tester',
             dni: `DNI-${Date.now()}`,
             fecha_nacimiento: '2001-01-01',
             telefono: '987654321',
-            direccion: 'Calle Inscripción',
-            carrera: 'Ingeniería Civil'
+            direccion: 'Calle Alumno 456',
+            carrera: 'Informática'
         });
         expect(alumnoRes.statusCode).toBe(201);
         alumnoId = alumnoRes.body.id;
 
-        // Crear materia
-        const materiaRes = await request(app).post('/api/materias').send({
-            nombre: 'Física',
-            descripcion: 'Física general',
-            codigo: `FIS-${Date.now()}`
-        });
-        expect(materiaRes.statusCode).toBe(201);
-        const materiaId = materiaRes.body.id;
-
-        // Crear usuario y profesor
-        const profUserRes = await request(app).post('/api/usuarios').send({
-            email: `prof-${Date.now()}@mail.com`,
-            password: '123456',
+        // Crear usuario para profesor
+        const usuarioProfesor = await request(app).post('/api/usuarios').send({
+            email: `prof${uuidv4()}@mail.com`,
+            password: '12345678',
             rol: 'profesor'
         });
-        expect(profUserRes.statusCode).toBe(201);
-        const profUsuarioId = profUserRes.body.id;
+        expect(usuarioProfesor.statusCode).toBe(201);
 
-        const profesorRes = await request(app).post('/api/profesores').send({
-            usuario_id: profUsuarioId,
-            nombre: 'María',
+        // Crear Profesor
+        const profesor = await request(app).post('/api/profesores').send({
+            usuario_id: usuarioProfesor.body.id,
+            nombre: 'Juan',
             apellido: 'Pérez',
-            dni: `PROF-${Date.now()}`,
-            titulo: 'PhD',
-            especialidad: 'Mecánica'
+            dni: 'PROF-' + Date.now(),
+            titulo: 'Licenciado',
+            especialidad: 'Matemáticas'
         });
-        expect(profesorRes.statusCode).toBe(201);
-        const profesorId = profesorRes.body.id;
+        expect(profesor.statusCode).toBe(201);
 
-        // Crear curso
+        // Crear Materia
+        const materia = await request(app).post('/api/materias').send({
+            nombre: 'Álgebra',
+            descripcion: 'Matemática básica',
+            codigo: 'MAT' + Math.floor(Math.random() * 10000)
+        });
+        expect(materia.statusCode).toBe(201);
+
+        // Crear Curso con profesor y materia válidos
         const cursoRes = await request(app).post('/api/cursos').send({
-            profesor_id: profesorId,
-            materia_id: materiaId,
-            ano_academico: 2024,
+            profesor_id: profesor.body.id,
+            materia_id: materia.body.id,
+            anio_academico: 2024,
             cuatrimestre: 1,
             cupo: 35
         });

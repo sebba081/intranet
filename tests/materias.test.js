@@ -3,7 +3,9 @@ const app = require('../src/app');
 
 describe('Rutas de materias', () => {
     let materiaId = null;
-    const codigoBase = `MAT-${Date.now()}`;
+
+    // Máximo 15-20 caracteres
+    const codigoBase = `MAT-${Date.now().toString().slice(-5)}`;
 
     it('debería crear una nueva materia', async () => {
         const res = await request(app).post('/api/materias').send({
@@ -29,10 +31,11 @@ describe('Rutas de materias', () => {
     });
 
     it('debería actualizar una materia', async () => {
+        const codigoActualizado = `${codigoBase}U`; // ← más corto que "-UPD"
         const res = await request(app).put(`/api/materias/${materiaId}`).send({
             nombre: 'Matemática Avanzada',
             descripcion: 'Materia de matemáticas avanzadas',
-            codigo: `${codigoBase}-UPD`
+            codigo: codigoActualizado
         });
         expect(res.statusCode).toBe(200);
         expect(res.body.nombre).toBe('Matemática Avanzada');

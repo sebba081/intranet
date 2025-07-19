@@ -14,6 +14,7 @@ describe('Rutas de notas (calificaciones)', () => {
             password: '123456',
             rol: 'alumno'
         });
+        expect(userRes.statusCode).toBe(201);
         const usuarioId = userRes.body.id;
 
         const alumnoRes = await request(app).post('/api/alumnos').send({
@@ -26,21 +27,23 @@ describe('Rutas de notas (calificaciones)', () => {
             direccion: 'Calle Test 123',
             carrera: 'Ingeniería'
         });
+        expect(alumnoRes.statusCode).toBe(201);
         alumnoId = alumnoRes.body.id;
 
-        // Crear materia
         const materiaRes = await request(app).post('/api/materias').send({
             nombre: 'Matemática',
-            descripcion: 'Cálculo I'
+            descripcion: 'Cálculo I',
+            codigo: `MAT-${Date.now().toString().slice(-5)}`  // 👈 Agregado
         });
+        expect(materiaRes.statusCode).toBe(201);
         const materiaId = materiaRes.body.id;
 
-        // Crear profesor
         const profUserRes = await request(app).post('/api/usuarios').send({
             email: `prof-${Date.now()}@mail.com`,
             password: '123456',
             rol: 'profesor'
         });
+        expect(profUserRes.statusCode).toBe(201);
         const profUsuarioId = profUserRes.body.id;
 
         const profesorRes = await request(app).post('/api/profesores').send({
@@ -51,9 +54,9 @@ describe('Rutas de notas (calificaciones)', () => {
             titulo: 'Magíster',
             especialidad: 'Álgebra'
         });
+        expect(profesorRes.statusCode).toBe(201);
         const profesorId = profesorRes.body.id;
 
-        // Crear curso
         const cursoRes = await request(app).post('/api/cursos').send({
             profesor_id: profesorId,
             materia_id: materiaId,
@@ -61,14 +64,15 @@ describe('Rutas de notas (calificaciones)', () => {
             cuatrimestre: 1,
             cupo: 40
         });
+        expect(cursoRes.statusCode).toBe(201);
         cursoId = cursoRes.body.id;
 
-        // Crear inscripción válida
         const inscripcionRes = await request(app).post('/api/inscripciones').send({
             alumno_id: alumnoId,
             curso_id: cursoId,
             fecha_inscripcion: '2024-01-01'
         });
+        expect(inscripcionRes.statusCode).toBe(201);
         inscripcionId = inscripcionRes.body.id;
     });
 
@@ -107,7 +111,7 @@ describe('Rutas de notas (calificaciones)', () => {
             fecha: '2024-02-01'
         });
         expect(res.statusCode).toBe(200);
-        expect(res.body.nota).toBe(9.25);
+        expect(Number(res.body.nota)).toBe(9.25);
     });
 
     it('debería eliminar una calificación', async () => {

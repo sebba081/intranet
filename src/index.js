@@ -1,28 +1,25 @@
 const connection = require('./database/config/conection');
 const express = require('express');
 const path = require('path');
-const indexApi = require('./router/api/indexApi');
-const indexController = require('./router/controllers/indexController');
+const indexRouter = require('./router/index');
 
-// Configurar el motor de plantillas
 const app = express();
+const port = process.env.PORT || 3000;
 
-// Middleware para analizar el cuerpo de las solicitudes
-app.use(express.json()); // Agregar este middleware para solicitudes JSON
+// Configurar middleware
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../node_modules')));
 
-app.set('view engine', 'ejs');
+// Configurar el motor de vistas
 app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
-// Configurar la carpeta de archivos estáticos
-app.use('/vistas', express.static(path.join(__dirname, 'public', 'css')));
+// Rutas
+app.use('/', indexRouter);
 
-// Usar el enrutador de home
-app.use('/api', indexApi);
-app.use('/', indexController);
-
-app.set('port', process.env.PORT || 3000);
-app.listen(app.get('port'), () => {
-  console.log(`Servidor corriendo en el puerto ${app.get('port')}`);
+// Iniciar el servidor
+app.listen(port, () => {
+  console.log(`Servidor corriendo en http://localhost:${port}`);
 });
-// No necesitas llamar a connection.connect aquí, ya que se hace en conection.js
