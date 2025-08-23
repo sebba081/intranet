@@ -1,28 +1,42 @@
-// middleware/auth.js
-const users = [
-  { id: 1, email: 'admin@admin.com', password: 'admin' },
-  { id: 2, email: 'user', password: 'pass123' }
-];
+const { Usuario } = require('../../database/models');
+const bcrypt = require('bcrypt');
 
-const authMiddleware = (req, res, next) => {
+async function authMiddleware(req, res, next) {
   const { email, password } = req.body;
-  
+
   if (!email || !password) {
-    req.authError = 'Debe proporcionar usuario y contraseña';
+    req.authError = 'Todos los campos son obligatorios';
     return next();
   }
 
-  const user = users.find(u => 
-    u.email === email && u.password === password
-  );
+  try {
+    const usuario = await Usuario.findOne({ where: { email } });
 
-  if (!user) {
-    req.authError = 'Usuario o contraseña inválidos';
-    return next();
+    if (!usuario) {
+      req.authError = 'Correo no registrado';
+      return next();
+    }
+
+    const passwordValida = await bcrypt.compare(password, usuario.password);
+    if (!passwordValida) {
+      req.authError = 'Contraseña incorrecta';
+      return next();
+    }
+
+    // Guardar usuario en la sesión
+    req.session.usuario = {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      rol: usuario.rol
+    };
+
+    next();
+
+  } catch (error) {
+    console.error(error);
+    req.authError = 'Error interno del servidor';
+    next();
   }
+}
 
-  req.user = user;
-  next();
-};
-
-module.exports = { authMiddleware }
+module.exports = { authMiddleware };
