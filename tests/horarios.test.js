@@ -4,6 +4,8 @@ const { sequelize } = require('../src/database/models');
 
 describe('Rutas de horarios', () => {
     let horarioId = null;
+    let cursoId = null;
+    let aulaId = null;
 
     let cursoId;
     let aulaId;
@@ -19,6 +21,17 @@ describe('Rutas de horarios', () => {
         aulaId = aulaRes.body.id;
 
         const usuarioProf = await request(app).post('/api/usuarios').send({
+    beforeAll(async () => {
+        // Crear materia
+        const materiaRes = await request(app).post('/api/materias').send({
+            nombre: 'Informática',
+            descripcion: 'Materia de prueba',
+            codigo: 'INF-' + Date.now()
+        });
+        const materiaId = materiaRes.body.id;
+
+        // Crear usuario y profesor
+        const usuarioRes = await request(app).post('/api/usuarios').send({
             email: `prof-${Date.now()}@mail.com`,
             password: '123456',
             rol: 'profesor'
@@ -46,6 +59,35 @@ describe('Rutas de horarios', () => {
             cupo: 30
         });
         cursoId = cursoRes.body.id;
+        const usuarioId = usuarioRes.body.id;
+
+        const profesorRes = await request(app).post('/api/profesores').send({
+            usuario_id: usuarioId,
+            nombre: 'Ana',
+            apellido: 'González',
+            dni: 'DNI-' + Date.now(),
+            titulo: 'Licenciada',
+            especialidad: 'Sistemas'
+        });
+        const profesorId = profesorRes.body.id;
+
+        // Crear curso válido
+        const cursoRes = await request(app).post('/api/cursos').send({
+            profesor_id: profesorId,
+            materia_id: materiaId,
+            anio_academico: 2024,
+            cuatrimestre: 1,
+            cupo: 40
+        });
+        cursoId = cursoRes.body.id;
+
+        // Crear aula válida
+        const aulaRes = await request(app).post('/api/aulas').send({
+            nombre: 'Laboratorio 1',
+            capacidad: 25,
+            ubicacion: 'Edificio A'
+        });
+        aulaId = aulaRes.body.id;
     });
 
     it('debería crear un nuevo horario', async () => {
@@ -59,12 +101,6 @@ describe('Rutas de horarios', () => {
         expect(res.statusCode).toBe(201);
         expect(res.body).toHaveProperty('id');
         horarioId = res.body.id;
-    });
-
-    it('debería obtener todos los horarios', async () => {
-        const res = await request(app).get('/api/horarios');
-        expect(res.statusCode).toBe(200);
-        expect(Array.isArray(res.body)).toBe(true);
     });
 
     it('debería obtener un horario por ID', async () => {

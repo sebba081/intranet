@@ -4,6 +4,8 @@ const { sequelize } = require('../src/database/models');
 
 describe('Rutas de cursos', () => {
     let cursoId = null;
+    let profesorId = null;
+    let materiaId = null;
 
     let profesorId;
     let materiaId;
@@ -12,6 +14,9 @@ describe('Rutas de cursos', () => {
         await sequelize.sync({ force: true });
 
         const usuarioProf = await request(app).post('/api/usuarios').send({
+    beforeAll(async () => {
+        // Crear usuario para el profesor
+        const profUserRes = await request(app).post('/api/usuarios').send({
             email: `prof-${Date.now()}@mail.com`,
             password: '123456',
             rol: 'profesor'
@@ -31,6 +36,28 @@ describe('Rutas de cursos', () => {
             descripcion: 'Historia básica',
             codigo: `MAT-${Date.now()}`
         });
+        expect(profUserRes.statusCode).toBe(201);
+        const usuarioId = profUserRes.body.id;
+
+        // Crear profesor
+        const profesorRes = await request(app).post('/api/profesores').send({
+            usuario_id: usuarioId,
+            nombre: 'Carlos',
+            apellido: 'Docente',
+            dni: `PROF-${Date.now()}`,
+            titulo: 'Ingeniero',
+            especialidad: 'Matemáticas'
+        });
+        expect(profesorRes.statusCode).toBe(201);
+        profesorId = profesorRes.body.id;
+
+        // Crear materia
+        const materiaRes = await request(app).post('/api/materias').send({
+            nombre: 'Álgebra',
+            descripcion: 'Álgebra I',
+            codigo: `MAT-${Date.now()}`
+        });
+        expect(materiaRes.statusCode).toBe(201);
         materiaId = materiaRes.body.id;
     });
 

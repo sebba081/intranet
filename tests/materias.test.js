@@ -4,7 +4,9 @@ const { sequelize } = require('../src/database/models');
 
 describe('Rutas de materias', () => {
     let materiaId = null;
-    const codigoBase = `MAT-${Date.now()}`;
+
+    // Máximo 15-20 caracteres
+    const codigoBase = `MAT-${Date.now().toString().slice(-5)}`;
 
     beforeAll(async () => {
         await sequelize.sync({ force: true });
@@ -34,10 +36,11 @@ describe('Rutas de materias', () => {
     });
 
     it('debería actualizar una materia', async () => {
+        const codigoActualizado = `${codigoBase}U`; // ← más corto que "-UPD"
         const res = await request(app).put(`/api/materias/${materiaId}`).send({
             nombre: 'Matemática Avanzada',
             descripcion: 'Materia de matemáticas avanzadas',
-            codigo: `${codigoBase}-UPD`
+            codigo: codigoActualizado
         });
         expect(res.statusCode).toBe(200);
         expect(res.body.nombre).toBe('Matemática Avanzada');

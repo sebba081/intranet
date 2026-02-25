@@ -1,0 +1,54 @@
+/* Modo claro por defecto */
+body.light-mode {
+    background-color: #f4f6f9;
+    color: #212529;
+}
+
+/* Modo oscuro */
+body.dark-mode {
+    background-color: #1e1e2f !important;
+    color: #f8f9fa;
+}
+
+body.dark-mode .card {
+    background-color: #2d2d44;
+    border-color: #444;
+    color: #f8f9fa;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .input-group-text {
+    background-color: #3a3a50;
+    border-color: #555;
+    color: #f8f9fa;
+}
+
+body.dark-mode .form-control::placeholder {
+    color: #bbb;
+}
+
+body.dark-mode .btn-primary {
+    background-color: #5a5aff;
+    border-color: #5a5aff;
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: #6b6bff;
+    border-color: #6b6bff;
+}
+
+body.dark-mode .btn-danger {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
+body.dark-mode .btn-danger:hover {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+body.dark-mode .btn-secondary {
+    background-color: #444;
+    border-color: #444;
+    color: #fff;
+}

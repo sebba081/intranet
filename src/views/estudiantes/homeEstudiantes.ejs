@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('../partials/head')
+    %>
+
+    <body class="hold-transition sidebar-mini layout-fixed">
+        <div class="wrapper">
+
+            <!-- Navbar -->
+            <%- include('../partials/header')
+                %>
+
+                <!-- Sidebar -->
+                <%- include('partials/sidebarEstudiante')
+                    %>
+
+                    <!-- Contenido principal -->
+                    <div class="content-wrapper">
+                        <!-- Encabezado -->
+                        <section class="content-header">
+                            <div class="container-fluid">
+                                <h1 class="mb-2">Bienvenido, <%= estudiante.nombre
+                                        %> 👋</h1>
+                                <p class="text-muted">Resumen académico del cuatrimestre actual</p>
+                            </div>
+                        </section>
+
+                        <!-- Contenido -->
+                        <section class="content">
+                            <div class="container-fluid">
+
+                                <!-- Tarjetas resumen -->
+                                <div class="row">
+                                    <div class="col-lg-3 col-6">
+                                        <div class="small-box bg-info">
+                                            <div class="inner">
+                                                <h3>
+                                                    <%= totalCursos
+                                                        %>
+                                                </h3>
+                                                <p>Cursos Inscritos</p>
+                                            </div>
+                                            <div class="icon"><i class="fas fa-book"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-6">
+                                        <div class="small-box bg-success">
+                                            <div class="inner">
+                                                <h3>
+                                                    <%= promedioNotas
+                                                        %>
+                                                </h3>
+                                                <p>Promedio General</p>
+                                            </div>
+                                            <div class="icon"><i class="fas fa-chart-line"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-6">
+                                        <div class="small-box bg-warning">
+                                            <div class="inner">
+                                                <h3>
+                                                    <%= clasesHoy
+                                                        %>
+                                                </h3>
+                                                <p>Clases Hoy</p>
+                                            </div>
+                                            <div class="icon"><i class="fas fa-calendar-day"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-6">
+                                        <div class="small-box bg-danger">
+                                            <div class="inner">
+                                                <h5>
+                                                    <%= proximaClase.hora
+                                                        %>
+                                                </h5>
+                                                <p>Próxima Clase</p>
+                                            </div>
+                                            <div class="icon"><i class="fas fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Cursos inscritos -->
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="card-title"><i class="fas fa-graduation-cap"></i> Mis Cursos</h3>
+                                    </div>
+                                    <div class="card-body table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Materia</th>
+                                                    <th>Profesor</th>
+                                                    <th>Aula</th>
+                                                    <th>Día</th>
+                                                    <th>Horario</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% cursos.forEach(curso=> { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= curso.materia
+                                                                %>
+                                                        </td>
+                                                        <td>
+                                                            <%= curso.profesor
+                                                                %>
+                                                        </td>
+                                                        <td>
+                                                            <%= curso.aula
+                                                                %>
+                                                        </td>
+                                                        <td>
+                                                            <%= curso.dia_semana
+                                                                %>
+                                                        </td>
+                                                        <td>
+                                                            <%= curso.hora_inicio
+                                                                %> - <%= curso.hora_fin
+                                                                    %>
+                                                        </td>
+                                                    </tr>
+                                                    <% })
+                                                        %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Calificaciones -->
+                                <div class="card mt-4">
+                                    <div class="card-header bg-success text-white">
+                                        <h3 class="card-title"><i class="fas fa-star"></i> Calificaciones</h3>
+                                    </div>
+                                    <div class="card-body table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Materia</th>
+                                                    <th>Nota</th>
+                                                    <th>Fecha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% calificaciones.forEach(cal=> { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= cal.materia
+                                                                %>
+                                                        </td>
+                                                        <td>
+                                                            <%= cal.nota
+                                                                %>
+                                                        </td>
+                                                        <td>
+                                                            <%= cal.fecha
+                                                                %>
+                                                        </td>
+                                                    </tr>
+                                                    <% })
+                                                        %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Footer -->
+                    <%- include('../partials/footer')
+                        %>
+        </div>
+
+        <!-- Scripts -->
+        <%- include('../partials/scripts')
+            %>
+    </body>
+
+</html>
