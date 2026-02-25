@@ -1,11 +1,21 @@
 const { Sequelize } = require('sequelize');
 const dbConfig = require('./config.json')[process.env.NODE_ENV || 'development'];
 
-const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
-  host: dbConfig.host,
-  dialect: dbConfig.dialect,
-  logging: console.log, // Esto habilita el registro de consultas
-});
+let sequelize;
+
+if (dbConfig.dialect === 'sqlite') {
+  sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: dbConfig.storage,
+    logging: false
+  });
+} else {
+  sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+    logging: console.log, // Esto habilita el registro de consultas
+  });
+}
 
 sequelize.authenticate()
   .then(() => {

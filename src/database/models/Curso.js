@@ -8,13 +8,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     profesor_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: false
     },
     materia_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: false
     },
-    año_academico: {
+    anio_academico: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -37,6 +37,9 @@ module.exports = (sequelize, DataTypes) => {
     });
     Curso.belongsTo(models.Profesor, {
       foreignKey: 'profesor_id'
+    });
+    Curso.hasMany(models.Inscripcion, {
+      foreignKey: 'curso_id'
     });
   };
 

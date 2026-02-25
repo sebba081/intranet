@@ -8,10 +8,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     inscripcion_id: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'inscripciones',
+        key: 'id'
+      }
     },
     nota: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(4, 2),
       allowNull: false
     },
     fecha: {
@@ -23,9 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
-  // Aquí puedes definir las asociaciones si es necesario
   Calificacion.associate = function(models) {
-    // Asociaciones
+    Calificacion.belongsTo(models.Inscripcion, {
+      foreignKey: 'inscripcion_id'
+    });
   };
 
   return Calificacion;

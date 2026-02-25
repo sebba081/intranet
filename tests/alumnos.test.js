@@ -1,20 +1,25 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de alumnos', () => {
     let alumnoId = null;
     let usuarioId = null;
 
     beforeAll(async () => {
+        await sequelize.sync({ force: true });
         const usuarioRes = await request(app).post('/api/usuarios').send({
             email: `alumno-${Date.now()}@mail.com`,
             password: '123456',
             rol: 'alumno'
         });
-        console.log('Respuesta de creación de usuario:', usuarioRes.body);
         expect(usuarioRes.statusCode).toBe(201);
         usuarioId = usuarioRes.body.id;
         expect(usuarioId).toBeDefined();
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 
     it('debería crear un nuevo alumno', async () => {
@@ -24,18 +29,12 @@ describe('Rutas de alumnos', () => {
             apellido: 'Pérez',
             dni: `DNI${Date.now()}`,
             fecha_nacimiento: '2000-01-01',
-            telefono: '123456789',
-            direccion: 'Calle Falsa 123',
             carrera: 'Ingeniería Informática'
         });
 
-        console.log('CREAR alumno:', res.statusCode, res.body);
-
         expect(res.statusCode).toBe(201);
         expect(res.body).toHaveProperty('id');
-
         alumnoId = res.body.id;
-        console.log('ID asignado:', alumnoId);
     });
 
     it('debería obtener todos los alumnos', async () => {
@@ -56,15 +55,18 @@ describe('Rutas de alumnos', () => {
             apellido: 'Pérez',
             dni: `DNI${Date.now()}`,
             fecha_nacimiento: '2000-01-01',
-            telefono: '987654321',
-            direccion: 'Nueva dirección'
+            carrera: 'Ingeniería Industrial'
         });
         expect(res.statusCode).toBe(200);
         expect(res.body.nombre).toBe('Juan Modificado');
+        expect(res.body.carrera).toBe('Ingeniería Industrial');
     });
 
     it('debería eliminar un alumno', async () => {
         const res = await request(app).delete(`/api/alumnos/${alumnoId}`);
         expect(res.statusCode).toBe(204);
+
+        const getRes = await request(app).get(`/api/alumnos/${alumnoId}`);
+        expect(getRes.statusCode).toBe(404);
     });
 });

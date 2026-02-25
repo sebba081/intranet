@@ -7,12 +7,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     nombre: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     descripcion: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    codigo: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      unique: true
     }
   }, {
     tableName: 'materias',

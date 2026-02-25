@@ -1,53 +1,106 @@
 <!DOCTYPE html>
 <html lang="es">
-<%- include('partials/head') %>
-<body class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="grid justify-center w-full">
-    <% if (typeof user !== 'undefined') { %>
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-        <%= error %>
-      </div>
-    <% } %>
+<%- include('partials/head')
+    %>
 
-    <div class="bg-white shadow-md rounded-xl p-8 w-full max-w-md">
-      <h1 class="text-2xl font-bold text-center text-blue-700 mb-6">Iniciar sesión</h1>
+    <body class="hold-transition login-page light-mode">
+        <div class="login-box">
+            <div class="card card-outline card-primary">
+                <div class="card-header text-center">
+                    <a href="#"
+                        class="h1"><b>Admin</b>LTE</a>
+                </div>
+                <div class="card-body">
+                    <p class="login-box-msg">Ingresa tus credenciales para iniciar sesión</p>
 
-      <form class="space-y-4" action="/login" method="POST">
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">
-            Correo electrónico
-          </label>
-          <input type="email" id="email" name="email" required
-                 class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <% if
+                        (typeof
+                        error
+                        !=='undefined'
+                        )
+                        {
+                        %>
+                        <div class="alert alert-danger alert-dismissible">
+                            <%= error
+                                %>
+                                <button type="button"
+                                    class="close"
+                                    data-dismiss="alert">&times;</button>
+                        </div>
+                        <% }
+                            %>
+
+                            <form action="/login"
+                                method="POST">
+                                <div class="input-group mb-3">
+                                    <input type="email"
+                                        name="email"
+                                        class="form-control"
+                                        placeholder="Correo electrónico"
+                                        required>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <input type="password"
+                                        name="password"
+                                        class="form-control"
+                                        placeholder="Contraseña"
+                                        required>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text"><span class="fas fa-lock"></span></div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-8">
+                                        <div class="icheck-primary">
+                                            <input type="checkbox"
+                                                id="remember"
+                                                name="remember">
+                                            <label for="remember">Recordarme</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="submit"
+                                            class="btn btn-primary btn-block">Entrar</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="social-auth-links text-center mb-3">
+                                <a href="#"
+                                    class="btn btn-block btn-primary">
+                                    <i class="fab fa-facebook mr-2"></i> Iniciar sesión con Facebook
+                                </a>
+                                <a href="#"
+                                    class="btn btn-block btn-danger">
+                                    <i class="fab fa-google-plus mr-2"></i> Iniciar sesión con Google+
+                                </a>
+                            </div>
+
+                            <p class="mb-1">
+                                <a href="/forgot-password">¿Olvidaste tu contraseña?</a>
+                            </p>
+                            <p class="mb-0">
+                                <a href="/register"
+                                    class="text-center">Registrarse como nuevo usuario</a>
+                            </p>
+                </div>
+            </div>
         </div>
 
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">
-            Contraseña
-          </label>
-          <input type="password" id="password" name="password" required
-                 class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-
-        <div class="flex items-center justify-between">
-          <label class="flex items-center text-sm text-gray-600">
-            <input type="checkbox" class="mr-2" name="remember">
-            Recordarme
-          </label>
-          <a href="/forgot-password" class="text-sm text-blue-600 hover:underline">
-            ¿Olvidaste tu contraseña?
-          </a>
-        </div>
-
-        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
-          Entrar
+        <!-- Botón flotante de cambio de tema -->
+        <button id="themeToggle"
+            class="btn btn-secondary position-fixed"
+            style="bottom: 20px; right: 20px; z-index: 1000;">
+            🌙
         </button>
-      </form>
 
-      <p class="mt-6 text-center text-sm text-gray-500">
-        © 2025 Intranet Empresa S.A.
-      </p>
-    </div>
-  </div>
-</body>
+        <%- include('partials/scripts')
+            %>
+    </body>
+
 </html>

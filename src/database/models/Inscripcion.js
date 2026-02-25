@@ -1,22 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
   const Inscripcion = sequelize.define('Inscripcion', {
     id: {
-      type: DataTypes.UUID, 
+      type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false
     },
     alumno_id: {
       type: DataTypes.UUID,
+      allowNull: false,
       references: {
-        model: 'Alumno',
+        model: 'alumnos',
         key: 'id'
       }
     },
     curso_id: {
       type: DataTypes.UUID,
+      allowNull: false,
       references: {
-        model: 'Curso',
+        model: 'cursos',
         key: 'id'
       }
     },
@@ -26,7 +28,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     tableName: 'inscripciones',
-    timestamps: true
+    timestamps: true,
+    uniqueKeys: {
+      alumno_curso_unique: {
+        fields: ['alumno_id', 'curso_id']
+      }
+    }
   });
 
   Inscripcion.associate = models => {

@@ -1,23 +1,85 @@
 const express = require('express');
 const router = express.Router();
+const { Carrera } = require('../../database/models'); // Asegúrate que este modelo exista
 
-//rutas contolador de estudiantes
-router.get('/', (req, res) => {
-    res.send('GET carreras');
+// Obtener todas las carreras
+router.get('/', async (req, res) => {
+    try {
+        const carreras = await Carrera.findAll();
+        res.json(carreras);
+    } catch (error) {
+        console.error('❌ Error al obtener carreras:', error);
+        res.status(500).json({ error: 'Error al obtener las carreras' });
+    }
 });
 
-router.post('/', (req, res) => {
-    res.send('POST carreras');
+// Crear una nueva carrera
+router.post('/', async (req, res) => {
+    try {
+        const { nombre } = req.body;
+        if (!nombre) {
+            return res.status(400).json({ error: 'El nombre es obligatorio' });
+        }
+
+        const nuevaCarrera = await Carrera.create({ nombre });
+        res.status(201).json(nuevaCarrera);
+    } catch (error) {
+        console.error('❌ Error al crear carrera:', error);
+        res.status(500).json({ error: 'Error al crear la carrera' });
+    }
 });
 
-router.put('/:id', (req, res) => {
-    res.send(`PUT carreras con ID: ${req.params.id}`);
+// Obtener una carrera por ID
+router.get('/:id', async (req, res) => {
+    try {
+        const carrera = await Carrera.findByPk(req.params.id);
+        if (!carrera) {
+            return res.status(404).json({ error: 'Carrera no encontrada' });
+        }
+        res.status(200).json(carrera);
+    } catch (error) {
+        console.error('❌ Error al obtener carrera:', error);
+        res.status(500).json({ error: 'Error al obtener la carrera' });
+    }
 });
 
-router.delete('/:id', (req, res) => {
-    res.send(`DELETE carreras con ID: ${req.params.id}`);
+// Actualizar una carrera por ID
+router.put('/:id', async (req, res) => {
+    try {
+        const { nombre } = req.body;
+
+        const [updated] = await Carrera.update({ nombre }, {
+            where: { id: req.params.id }
+        });
+
+        if (!updated) {
+            return res.status(404).json({ error: 'Carrera no encontrada' });
+        }
+
+        const carreraActualizada = await Carrera.findByPk(req.params.id);
+        res.json(carreraActualizada);
+    } catch (error) {
+        console.error('❌ Error al actualizar carrera:', error);
+        res.status(500).json({ error: 'Error al actualizar la carrera' });
+    }
 });
 
-// Exportar el router
+// Eliminar una carrera por ID
+router.delete('/:id', async (req, res) => {
+    try {
+        const deleted = await Carrera.destroy({
+            where: { id: req.params.id }
+        });
+
+        if (!deleted) {
+            return res.status(404).json({ error: 'Carrera no encontrada' });
+        }
+
+        res.status(204).end();
+    } catch (error) {
+        console.error('❌ Error al eliminar carrera:', error);
+        res.status(500).json({ error: 'Error al eliminar la carrera' });
+    }
+});
 
 module.exports = router;

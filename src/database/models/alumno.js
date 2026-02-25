@@ -9,30 +9,31 @@ module.exports = (sequelize, DataTypes) => {
     usuario_id: {
       type: DataTypes.UUID,
       allowNull: false,
+      unique: true,
       references: {
-        model: 'Usuario',
+        model: 'usuarios',
         key: 'id'
       }
-    }
-    ,
+    },
     nombre: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     apellido: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     dni: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      unique: true
     },
     fecha_nacimiento: {
       type: DataTypes.DATE,
       allowNull: false
     },
     carrera: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {
@@ -40,11 +41,11 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
-  // Definir asociación
   Alumno.associate = models => {
     Alumno.belongsTo(models.Usuario, {
       foreignKey: 'usuario_id'
     });
   };
+
   return Alumno;
 };

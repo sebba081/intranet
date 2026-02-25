@@ -7,11 +7,8 @@
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": "8527autoS*",
-    "database": "intranet_test",
-    "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "sqlite",
+    "storage": ":memory:"
   },
   "production": {
     "username": "root",

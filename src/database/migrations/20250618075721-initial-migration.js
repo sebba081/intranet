@@ -156,6 +156,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      ubicacion: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       capacidad: {
         type: Sequelize.INTEGER,
         allowNull: false
@@ -172,6 +176,7 @@ module.exports = {
       }
     });
 
+
     // Materias
     await queryInterface.createTable('materias', {
       id: {
@@ -185,6 +190,11 @@ module.exports = {
         allowNull: false
       },
       descripcion: Sequelize.TEXT,
+      codigo: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -217,7 +227,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      año_academico: {
+      ano_academico: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
