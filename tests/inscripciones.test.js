@@ -1,5 +1,10 @@
 const request = require('supertest');
 const app = require('../src/app');
+
+describe('Rutas de inscripciones', () => {
+    let inscripcionId = null;
+    const alumnoId = '11111111-1111-1111-1111-111111111111';
+    const cursoId = '22222222-2222-2222-2222-222222222222';
 const { sequelize } = require('../src/database/models');
 const { v4: uuidv4 } = require('uuid');
 
@@ -103,6 +108,7 @@ describe('Rutas de inscripciones', () => {
             fecha_inscripcion: '2024-02-01'
         });
         expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty('fecha_inscripcion');
         expect(res.body.fecha_inscripcion.startsWith('2024-02-01')).toBe(true);
     });
 

@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Obtener una inscripcion por ID
 // Obtener una inscripción por ID
 router.get('/:id', async (req, res) => {
     try {
@@ -27,6 +28,28 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Crear una nueva inscripcion
+router.post('/', async (req, res) => {
+    try {
+        const nuevaInscripcion = await Inscripcion.create(req.body);
+        res.status(201).json(nuevaInscripcion);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al crear la inscripción' });
+    }
+});
+
+// Actualizar una inscripcion
+router.put('/:id', async (req, res) => {
+    try {
+        const [updated] = await Inscripcion.update(req.body, {
+            where: { id: req.params.id }
+        });
+        if (!updated) {
+            return res.status(404).json({ error: 'Inscripción no encontrada' });
+        }
+        const inscripcionActualizada = await Inscripcion.findByPk(req.params.id);
+        res.json(inscripcionActualizada);
+    } catch (error) {
 // Crear una nueva inscripción
 router.post('/', async (req, res) => {
     try {
@@ -77,12 +100,18 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// Eliminar una inscripcion
 // Eliminar una inscripción
 router.delete('/:id', async (req, res) => {
     try {
         const deleted = await Inscripcion.destroy({
             where: { id: req.params.id }
         });
+        if (!deleted) {
+            return res.status(404).json({ error: 'Inscripción no encontrada' });
+        }
+        res.status(204).end();
+    } catch (error) {
 
         if (!deleted) {
             return res.status(404).json({ error: 'Inscripción no encontrada' });
