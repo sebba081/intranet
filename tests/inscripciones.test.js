@@ -59,6 +59,8 @@ describe('Rutas de inscripciones', () => {
 
         // Crear Curso con profesor y materia válidos
         const cursoRes = await request(app).post('/api/cursos').send({
+            profesor_id: profesorId,
+            materia_id: materiaId,
             profesor_id: profesor.body.id,
             materia_id: materia.body.id,
             anio_academico: 2024,

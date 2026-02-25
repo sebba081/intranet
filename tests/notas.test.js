@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de notas (calificaciones)', () => {
     let notaId = null;
@@ -8,6 +9,7 @@ describe('Rutas de notas (calificaciones)', () => {
     let cursoId = null;
 
     beforeAll(async () => {
+        await sequelize.sync({ force: true });
         // Crear usuario y alumno
         const userRes = await request(app).post('/api/usuarios').send({
             email: `alumno-${Date.now()}@mail.com`,
@@ -33,6 +35,7 @@ describe('Rutas de notas (calificaciones)', () => {
         const materiaRes = await request(app).post('/api/materias').send({
             nombre: 'Matemática',
             descripcion: 'Cálculo I',
+            codigo: `MAT-${Date.now()}`
             codigo: `MAT-${Date.now().toString().slice(-5)}`  // 👈 Agregado
         });
         expect(materiaRes.statusCode).toBe(201);
@@ -64,6 +67,7 @@ describe('Rutas de notas (calificaciones)', () => {
             cuatrimestre: 1,
             cupo: 40
         });
+        console.log('cursoRes', cursoRes.statusCode, cursoRes.body);
         expect(cursoRes.statusCode).toBe(201);
         cursoId = cursoRes.body.id;
 
@@ -120,5 +124,9 @@ describe('Rutas de notas (calificaciones)', () => {
 
         const getRes = await request(app).get(`/api/notas/${notaId}`);
         expect(getRes.statusCode).toBe(404);
+    });
+
+    afterAll(async () => {
+        await sequelize.close();
     });
 });

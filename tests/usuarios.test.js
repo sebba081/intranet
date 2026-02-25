@@ -1,8 +1,13 @@
 const request = require('supertest');
 const app = require('../src/app');
+const { sequelize } = require('../src/database/models');
 
 describe('Rutas de usuarios', () => {
   let userId = null;
+
+  beforeAll(async () => {
+    await sequelize.sync({ force: true });
+  });
 
   it('debería crear un nuevo usuario', async () => {
     const res = await request(app).post('/api/usuarios').send({
@@ -38,5 +43,9 @@ describe('Rutas de usuarios', () => {
   it('debería eliminar un usuario', async () => {
     const res = await request(app).delete(`/api/usuarios/${userId}`);
     expect(res.statusCode).toBe(204);
+  });
+
+  afterAll(async () => {
+    await sequelize.close();
   });
 });
