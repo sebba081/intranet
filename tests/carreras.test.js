@@ -1,76 +1,52 @@
 const request = require('supertest');
 const app = require('../src/app');
-
-describe('Rutas de carreras', () => {
-    it('debería responder a GET', async () => {
-        const res = await request(app).get('/api/carreras');
-        expect(res.statusCode).toBe(200);
-        expect(res.text).toBe('GET carreras');
-    });
-
-    it('debería responder a POST', async () => {
-        const res = await request(app).post('/api/carreras');
-        expect(res.statusCode).toBe(200);
-        expect(res.text).toBe('POST carreras');
-    });
-
-    it('debería responder a PUT', async () => {
-        const res = await request(app).put('/api/carreras/1');
-        expect(res.statusCode).toBe(200);
-        expect(res.text).toBe('PUT carreras con ID: 1');
-    });
-
-    it('debería responder a DELETE', async () => {
-        const res = await request(app).delete('/api/carreras/1');
-        expect(res.statusCode).toBe(200);
-        expect(res.text).toBe('DELETE carreras con ID: 1');
 const { sequelize } = require('../src/database/models');
 
 describe('Rutas de carreras', () => {
-    let carreraId = null;
+  let carreraId = null;
 
-    beforeAll(async () => {
-        await sequelize.sync({ force: true });
+  beforeAll(async () => {
+    await sequelize.sync({ force: true });
+  });
+
+  it('debería crear una nueva carrera', async () => {
+    const res = await request(app).post('/api/carreras').send({
+      nombre: 'Ingeniería Civil'
     });
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveProperty('id');
+    carreraId = res.body.id;
+  });
 
-    it('debería crear una nueva carrera', async () => {
-        const res = await request(app).post('/api/carreras').send({
-            nombre: 'Ingeniería Civil'
-        });
-        expect(res.statusCode).toBe(201);
-        expect(res.body).toHaveProperty('id');
-        carreraId = res.body.id;
+  it('debería obtener todas las carreras', async () => {
+    const res = await request(app).get('/api/carreras');
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('debería obtener una carrera por ID', async () => {
+    const res = await request(app).get(`/api/carreras/${carreraId}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('id', carreraId);
+  });
+
+  it('debería actualizar una carrera', async () => {
+    const res = await request(app).put(`/api/carreras/${carreraId}`).send({
+      nombre: 'Ingeniería Industrial'
     });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.nombre).toBe('Ingeniería Industrial');
+  });
 
-    it('debería obtener todas las carreras', async () => {
-        const res = await request(app).get('/api/carreras');
-        expect(res.statusCode).toBe(200);
-        expect(Array.isArray(res.body)).toBe(true);
-    });
+  it('debería eliminar una carrera', async () => {
+    const res = await request(app).delete(`/api/carreras/${carreraId}`);
+    expect(res.statusCode).toBe(204);
 
-    it('debería obtener una carrera por ID', async () => {
-        const res = await request(app).get(`/api/carreras/${carreraId}`);
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toHaveProperty('id', carreraId);
-    });
+    const getRes = await request(app).get(`/api/carreras/${carreraId}`);
+    expect(getRes.statusCode).toBe(404);
+  });
 
-    it('debería actualizar una carrera', async () => {
-        const res = await request(app).put(`/api/carreras/${carreraId}`).send({
-            nombre: 'Ingeniería Industrial'
-        });
-        expect(res.statusCode).toBe(200);
-        expect(res.body.nombre).toBe('Ingeniería Industrial');
-    });
-
-    it('debería eliminar una carrera', async () => {
-        const res = await request(app).delete(`/api/carreras/${carreraId}`);
-        expect(res.statusCode).toBe(204);
-
-        const getRes = await request(app).get(`/api/carreras/${carreraId}`);
-        expect(getRes.statusCode).toBe(404);
-    });
-
-    afterAll(async () => {
-        await sequelize.close();
-    });
+  afterAll(async () => {
+    await sequelize.close();
+  });
 });

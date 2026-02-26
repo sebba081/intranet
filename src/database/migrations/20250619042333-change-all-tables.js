@@ -98,7 +98,7 @@ module.exports = {
         allowNull: false,
         references: { model: 'materias', key: 'id' }
       },
-      ano_academico: { type: Sequelize.INTEGER, allowNull: false },
+      anio_academico: { type: Sequelize.INTEGER, allowNull: false },
       cuatrimestre: { type: Sequelize.INTEGER, allowNull: false },
       cupo: { type: Sequelize.INTEGER, allowNull: false },
       createdAt: Sequelize.DATE,

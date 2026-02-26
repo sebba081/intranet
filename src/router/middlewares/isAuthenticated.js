@@ -24,11 +24,13 @@ async function authMiddleware(req, res, next) {
     }
 
     // Guardar usuario en la sesión
-    req.session.usuario = {
+    if (req.session) {
+      req.session.usuario = {
       id: usuario.id,
       nombre: usuario.nombre,
       rol: usuario.rol
-    };
+      };
+    }
 
     next();
 
