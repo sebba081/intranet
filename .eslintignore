@@ -1,0 +1,6 @@
+src/router/**
+src/database/**
+src/views/**
+src/index.js
+src/app.js
+tests/**
