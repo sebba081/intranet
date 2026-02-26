@@ -12,7 +12,6 @@
     "class-variance-authority": "^0.7.1",
     "cliui": "^9.0.1",
     "clsx": "^2.1.1",
-    "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.19.0",
     "jquery": "^3.7.1",
@@ -45,10 +44,12 @@
   },
   "scripts": {
     "test": "node ./node_modules/jest/bin/jest.js",
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "next start",
+    "dev": "next dev",
     "build": "next build",
-    "lint": "next lint"
+    "lint": "next lint",
+    "api:dev": "nodemon src/index.js",
+    "api:start": "node src/index.js"
   },
   "repository": {
     "type": "git",
