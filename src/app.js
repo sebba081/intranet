@@ -21,15 +21,11 @@ app.use(
   })
 );
 
-// EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
 // Archivos estáticos
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../node_modules')));
 
-// Rutas
+// Rutas API (sin motor de vistas)
 app.use('/', indexRouter);
 
 module.exports = app;
