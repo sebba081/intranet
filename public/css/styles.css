@@ -1,54 +1,186 @@
-/* Modo claro por defecto */
+:root {
+  --primary: #16A34A;
+  --primary-hover: #15803D;
+  --accent: #DCFCE7;
+  --bg-light: #F8FAFC;
+  --border-light: #E2E8F0;
+  --text-light: #0F172A;
+  --card-light: #FFFFFF;
+}
+
 body.light-mode {
-    background-color: #f4f6f9;
-    color: #212529;
+  background-color: var(--bg-light);
+  color: var(--text-light);
 }
 
-/* Modo oscuro */
 body.dark-mode {
-    background-color: #1e1e2f !important;
-    color: #f8f9fa;
+  background-color: #0B1220 !important;
+  color: #E2E8F0;
 }
 
-body.dark-mode .card {
-    background-color: #2d2d44;
-    border-color: #444;
-    color: #f8f9fa;
+/* Login moderno */
+.login-modern {
+  min-height: 100vh;
 }
 
-body.dark-mode .form-control,
-body.dark-mode .input-group-text {
-    background-color: #3a3a50;
-    border-color: #555;
-    color: #f8f9fa;
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
 }
 
-body.dark-mode .form-control::placeholder {
-    color: #bbb;
+.login-brand-panel {
+  background: linear-gradient(145deg, #0f172a 0%, #14532d 100%);
+  color: #ffffff;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-body.dark-mode .btn-primary {
-    background-color: #5a5aff;
-    border-color: #5a5aff;
+.login-brand-panel h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
 }
 
-body.dark-mode .btn-primary:hover {
-    background-color: #6b6bff;
-    border-color: #6b6bff;
+.login-brand-panel p {
+  opacity: .9;
+  max-width: 520px;
 }
 
-body.dark-mode .btn-danger {
-    background-color: #c0392b;
-    border-color: #c0392b;
+.login-brand-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: .65rem;
 }
 
-body.dark-mode .btn-danger:hover {
-    background-color: #e74c3c;
-    border-color: #e74c3c;
+.login-brand-panel i {
+  color: #86efac;
+  margin-right: .5rem;
 }
 
-body.dark-mode .btn-secondary {
-    background-color: #444;
-    border-color: #444;
-    color: #fff;
+.brand-badge {
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, .25);
+  color: #bbf7d0;
+  border-radius: 999px;
+  padding: .35rem .75rem;
+  width: fit-content;
+  margin-bottom: 1rem;
+  font-size: .75rem;
+  letter-spacing: .1em;
+}
+
+.login-card-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--bg-light);
+}
+
+.login-card-modern {
+  width: 100%;
+  max-width: 460px;
+  border: 1px solid var(--border-light);
+  background: var(--card-light);
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, .07);
+}
+
+.login-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.login-card-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--text-light);
+}
+
+.login-card-header p {
+  margin: .25rem 0 0;
+  color: #64748B;
+  font-size: .92rem;
+}
+
+.login-form-modern .form-control,
+.login-form-modern .input-group-text {
+  border-color: var(--border-light);
+  background: #fff;
+}
+
+.login-link {
+  font-size: .9rem;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.login-link:hover {
+  color: var(--primary-hover);
+}
+
+.login-submit {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.login-submit:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+/* Tema oscuro login */
+body.dark-mode .login-card-wrap {
+  background: #0B1220;
+}
+
+body.dark-mode .login-card-modern {
+  background: #0f172a;
+  border-color: #1e293b;
+  box-shadow: none;
+}
+
+body.dark-mode .login-card-header h2,
+body.dark-mode .form-label,
+body.dark-mode .form-check-label {
+  color: #e2e8f0;
+}
+
+body.dark-mode .login-card-header p {
+  color: #94a3b8;
+}
+
+body.dark-mode .login-form-modern .form-control,
+body.dark-mode .login-form-modern .input-group-text {
+  background: #111827;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .login-form-modern .form-control::placeholder {
+  color: #94a3b8;
+}
+
+body.dark-mode .btn-outline-secondary {
+  border-color: #475569;
+  color: #cbd5e1;
+}
+
+@media (max-width: 991px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .login-brand-panel {
+    padding: 2rem;
+  }
 }
