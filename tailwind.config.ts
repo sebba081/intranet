@@ -11,12 +11,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        border: "#E2E8F0",
-        background: "#F8FAFC",
-        foreground: "#0F172A",
-        primary: "#16A34A",
-        "primary-hover": "#15803D",
-        accent: "#DCFCE7"
+        border: "hsl(var(--border))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: "hsl(var(--primary))",
+        "primary-hover": "hsl(var(--primary-hover))",
+        accent: "hsl(var(--accent))"
       }
     }
   },
