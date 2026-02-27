@@ -1,9 +1,39 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAppContext } from "@/modules/auth";
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAppContext();
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const email = String(formData.get("email") ?? "").trim();
+    const password = String(formData.get("password") ?? "").trim();
+
+    if (!email || !password) {
+      setError("Debes ingresar correo y contraseña.");
+      return;
+    }
+
+    setLoading(true);
+    const isValid = login(email, password);
+
+    if (!isValid) {
+      setLoading(false);
+      setError("Credenciales inválidas. Revisa el correo y contraseña.");
+      return;
+    }
+
+    router.replace("/dashboard");
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-100 p-4 dark:bg-slate-950">
@@ -19,18 +49,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        <form
-          action="/api/usuarios/login"
-          method="POST"
-          className="space-y-3"
-          onSubmit={(e) => {
-            const formData = new FormData(e.currentTarget);
-            if (!formData.get("email") || !formData.get("password")) {
-              e.preventDefault();
-              setError("Debes ingresar correo y contraseña.");
-            }
-          }}
-        >
+        <form className="space-y-3" onSubmit={handleSubmit}>
           <input
             type="email"
             name="email"
@@ -47,11 +66,18 @@ export default function LoginPage() {
           />
           <button
             type="submit"
-            className="h-10 w-full rounded-md bg-primary font-medium text-white hover:opacity-90"
+            disabled={loading}
+            className="h-10 w-full rounded-md bg-primary font-medium text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Entrar
+            {loading ? "Ingresando..." : "Entrar"}
           </button>
         </form>
+
+        <div className="mt-5 rounded-md border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+          <p className="font-semibold">Usuarios demo:</p>
+          <p>sofia.martinez@instituto.edu / intranet123</p>
+          <p>carlos.herrera@instituto.edu / admin123</p>
+        </div>
       </section>
     </main>
   );
