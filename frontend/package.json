@@ -1,0 +1,13 @@
+{
+  "name": "intranet-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interfaz de la intranet educativa (Next.js 15 + App Router)",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "license": "ISC"
+}
