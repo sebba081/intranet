@@ -1,0 +1,14 @@
+{
+  "name": "intranet-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API REST de la intranet educativa (Express + Sequelize sobre MySQL 6FN)",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "npm test --prefix ..",
+    "migrate": "sequelize-cli db:migrate"
+  },
+  "license": "ISC"
+}

@@ -1,130 +1,67 @@
-# 🚪 Intranet Educativa
+# Intranet Educativa
 
-Aplicación de intranet para la gestión académica y administrativa de una institución educativa.
+Monorepo con dos aplicaciones independientes que comparten un único
+`node_modules` y un `package.json` de dependencias en la raíz:
 
-## 🎯 Objetivo
-
-Centralizar operaciones de:
-
-- Gestión de usuarios y roles.
-- Gestión académica (carreras, cursos, materias, horarios, notas, inscripciones).
-- Módulos de comunicación (anuncios, mensajes).
-- Vistas de panel para distintos perfiles (admin, profesor, alumno).
-
-## 🧱 Stack tecnológico
-
-### Frontend
-
-- **Next.js 15 (App Router)**
-- **React 19**
-- **TypeScript**
-- **Tailwind CSS**
-
-### Backend API
-
-- **Node.js + Express 5**
-- **Sequelize ORM**
-- **MySQL** (entorno normal)
-- **SQLite** (entorno de pruebas automatizadas)
-
-### Calidad
-
-- **Jest + Supertest** para pruebas de API.
-- **ESLint (Next.js config)** para linting.
-
-## 📁 Estructura principal del proyecto
-
-```text
-src/
-  app/                    # Rutas y páginas de Next.js (panel, login, home, etc.)
-  core/                   # App shell y design system base (sidebar, topbar, tema)
-  modules/                # Módulos por dominio (admin, académico, comunicaciones...)
-  shared/                 # Componentes y utilidades reutilizables
-  router/                 # Rutas de API Express (/api/*)
-  database/               # Modelos Sequelize, migraciones y configuración DB
-public/                   # Recursos estáticos CSS/JS
-tests/                    # Pruebas de integración de endpoints
-docs/                     # Requerimientos y diagramas funcionales/técnicos
+```
+intranet/
+├── backend/     API REST — Express 5 + Sequelize sobre MySQL (schema 6FN)
+├── frontend/    Interfaz — Next.js 15 (App Router) + Tailwind
+├── docs/        Requerimientos y diagramas
+├── package.json Dependencias y scripts de todo el proyecto
+└── .sequelizerc Rutas de sequelize-cli hacia backend/
 ```
 
-## ✅ Estado de revisión técnica
+Cada carpeta tiene su propio README con la estructura interna y sus
+convenciones: [backend/README.md](backend/README.md) ·
+[frontend/README.md](frontend/README.md).
 
-Se verificó el proyecto de punta a punta ejecutando:
-
-- Pruebas automáticas: **11 suites, 54 tests, todo en verde**.
-- Lint: sin errores ni warnings.
-- Build de producción de Next.js: exitoso.
-
-> Nota: si al ejecutar pruebas aparece un error de `sqlite3` (por ejemplo, `invalid ELF header`), recompila el binario local con:
->
-> ```bash
-> npm install sqlite3 --build-from-source
-> ```
-
-## ⚙️ Requisitos
-
-- **Node.js 20+** recomendado.
-- **npm 10+** recomendado.
-- Base de datos MySQL disponible para entorno de API real.
-
-## 🚀 Instalación y ejecución
+## Puesta en marcha
 
 ```bash
-git clone https://github.com/sebba081/intranet.git
-cd intranet
 npm install
+
+# Base de datos (una sola vez)
+mysql -u root -p < backend/database/schema.sql
+
+# Credenciales del backend
+cp backend/.env.example backend/.env    # y editar DB_USER / DB_PASSWORD
 ```
 
-### Desarrollo (frontend)
+## Scripts
 
-```bash
-npm run dev
-```
+| Comando | Qué hace |
+| --- | --- |
+| `npm run dev` | Next.js en `http://localhost:3000` |
+| `npm run api:dev` | API con nodemon en `http://localhost:3001` |
+| `npm run build` | Build de producción del frontend |
+| `npm start` | Sirve el build del frontend |
+| `npm run lint` | ESLint sobre `frontend/src` |
+| `npm test` | Jest + supertest contra la API (requiere MySQL) |
+| `npm run migrate` | `sequelize-cli db:migrate` |
 
-Aplicación: [http://localhost:3000](http://localhost:3000)
+Frontend y backend corren en procesos separados: hay que levantar los dos
+(`npm run dev` y `npm run api:dev` en dos terminales). El frontend llama a la
+API a través de `NEXT_PUBLIC_API_URL` (ver `frontend/.env.local.example`).
 
-### API Express (desarrollo)
+## Estructura en capas
 
-```bash
-npm run api:dev
-```
+Ambas aplicaciones usan la misma idea: las rutas no contienen lógica, la
+lógica vive en una capa intermedia y los tipos/utilidades son transversales.
 
-### Producción
+| Backend | Frontend | Responsabilidad |
+| --- | --- | --- |
+| `routes/` | `app/` | Declara los endpoints / las páginas |
+| `controllers/` | *(páginas)* | Traduce entrada y salida |
+| `services/` | `features/` + `services/api.ts` | Reglas de negocio y datos |
+| `models/` | — | Acceso a la base de datos |
+| `validators/` `middlewares/` | `features/auth/` | Validación y control de acceso |
+| `config/` `utils/` `types/` | `config/` `lib/` `types/` | Transversales |
 
-```bash
-npm run build
-npm start
-```
+## Base de datos
 
-## 🧪 Testing y validaciones
-
-### Ejecutar pruebas
-
-```bash
-npm test -- --runInBand
-```
-
-### Ejecutar lint
-
-```bash
-npm run lint
-```
-
-### Compilar para producción
-
-```bash
-npm run build
-```
-
-## 📚 Documentación
-
-- Guía de documentación general: [`docs/README.md`](docs/README.md)
-- Requerimientos funcionales: [`docs/requerimientos.md`](docs/requerimientos.md)
-- Diagramas: [`docs/diagramas/README.md`](docs/diagramas/README.md)
-
-## 🤝 Contribución
-
-1. Crea una rama desde `main`.
-2. Realiza cambios pequeños y verificables.
-3. Ejecuta pruebas, lint y build antes de abrir PR.
-4. Documenta cualquier cambio funcional en los README correspondientes.
+MySQL con el esquema en 6ª forma normal: cada atributo mutable vive en su
+propia tabla temporal (`valid_from` / `valid_to`) y las lecturas se hacen
+sobre las vistas `v_*`. El detalle está en
+[backend/database/README.md](backend/database/README.md) y el esquema completo
+en [backend/database/schema.sql](backend/database/schema.sql).

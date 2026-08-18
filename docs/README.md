@@ -27,7 +27,7 @@ Este directorio concentra la documentación funcional y de diseño del sistema.
 
 1. Comienza por `requerimientos.md` para entender alcance y reglas funcionales.
 2. Revisa los diagramas para validar actores, flujos y entidades.
-3. Contrasta con implementación en `src/modules`, `src/router/api` y `src/database/models`.
+3. Contrasta con implementación en `frontend/src/features`, `backend/src/routes` y `backend/src/models`.
 
 ## 🔄 Mantenimiento recomendado
 
